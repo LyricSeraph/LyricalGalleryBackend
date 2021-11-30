@@ -2,10 +2,12 @@ package me.lyriclaw.gallery.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Entity
@@ -49,6 +51,9 @@ public class Resource implements Serializable {
 
     @Column(name = "updated_at", nullable = false, updatable = false)
     private Instant updatedAt;
+
+    @OneToMany(targetEntity = ResourceTag.class, mappedBy = "resourceId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ResourceTag> tags;
 
     public String getStorageFilename() {
         return getUuid() + getExtension();

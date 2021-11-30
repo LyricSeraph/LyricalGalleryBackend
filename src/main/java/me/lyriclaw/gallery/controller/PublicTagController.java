@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Api(tags = "Public Tag APIs")
 @Validated
@@ -36,13 +37,7 @@ public class PublicTagController {
 
     @GetMapping
     @ApiOperation("Retrieve by query ")
-    public ApiResp<Page<TagDTO>> query(@Valid TagQueryVO vO,
-                                       @RequestParam(value = "resourceId", required = false) Long resourceId,
-                                       @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-        if (resourceId != null) {
-            return ApiResp.success(tagService.queryByResourceId(resourceId, pageable));
-        } else {
-            return ApiResp.success(tagService.query(vO, pageable));
-        }
+    public ApiResp<List<TagDTO>> query(@Valid TagQueryVO vO) {
+        return ApiResp.success(tagService.query(vO));
     }
 }

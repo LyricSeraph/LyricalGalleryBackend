@@ -23,7 +23,7 @@ import java.util.List;
 public class ImageThumbnailGenerator extends AbstractThumbnailGenerator {
 
     private static List<String> SUPPORTED_FORMATS = Arrays.asList(
-            ".png", ".jpg", ".jpeg", ".bmp"
+            ".png", ".jpg", ".jpeg", ".bmp", ".gif"
     );
 
     @Autowired

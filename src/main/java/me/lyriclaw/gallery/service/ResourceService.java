@@ -17,6 +17,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,21 +83,16 @@ public class ResourceService {
         return resourceRepository.findAll(Example.of(queryItem), pageable).map(this::toDTO);
     }
 
-    public Page<ResourceDTO> queryByTagId(Long tagId, Pageable pageable) {
-        Page<ResourceTagDTO> page = resourceTagService.findAllByTagId(tagId, pageable);
-        List<Long> ids = page.map(ResourceTagDTO::getResourceId)
-                .stream()
-                .collect(Collectors.toList());
-        final Map<Long, Resource> resourceMap = resourceRepository.findAllById(ids)
-                .stream()
-                .collect(Collectors.toMap(Resource::getId, (r) -> r));
-        return page.map(rt -> toDTO(resourceMap.getOrDefault(rt.getResourceId(), null)));
+    public Page<ResourceDTO> queryByAlbumAndTagAndName(@Nullable Long albumId, @Nullable Long tagId, @Nullable String name, Pageable pageable) {
+        Page<Resource> page = resourceRepository.findAllBy(albumId, tagId, name, pageable);
+        return page.map(this::toDTO);
     }
 
     private ResourceDTO toDTO(Resource original) {
         ResourceDTO bean = new ResourceDTO();
         if (original != null) {
             BeanUtils.copyProperties(original, bean);
+            bean.setTags(original.getTags().stream().map(resourceTagService::toDTO).collect(Collectors.toList()));
         }
         return bean;
     }

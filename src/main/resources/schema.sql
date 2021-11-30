@@ -58,5 +58,5 @@ create table if not exists ResourceTag
 create index if not exists ResourceTag_resource_index
     on ResourceTag (resource_id);
 
-create index if not exists ResourceTag_tag_index
-    on ResourceTag (tag_id);
+create unique index if not exists ResourceTag_tag_index
+    on ResourceTag (tag_id, resource_id);

@@ -16,6 +16,7 @@ public class ResourceQueryVO implements Serializable {
     private Long id;
 
     private String uuid;
+
     private String extension;
 
     private String name;
@@ -25,8 +26,8 @@ public class ResourceQueryVO implements Serializable {
     private String sourceUrl;
 
     private Long albumId;
+
     private Integer failedTries;
-    private Integer downloadTries;
     /**
      * idle: 0, downloading: 1, finished: 2
      */

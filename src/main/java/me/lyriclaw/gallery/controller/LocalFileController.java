@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -49,8 +47,8 @@ public class LocalFileController {
             case resources:
                 baseDirectory = storageConfig.getResourcePath();
                 break;
-            case previews:
-                baseDirectory = storageConfig.getPreviewPath();
+            case thumbnails:
+                baseDirectory = storageConfig.getThumbnailPath();
                 break;
         }
         Path path = Paths.get(baseDirectory.toString(), filename);

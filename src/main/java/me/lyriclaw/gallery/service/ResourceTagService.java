@@ -55,15 +55,7 @@ public class ResourceTagService {
         return resourceTagRepository.findAll(Example.of(queryItem), pageable).map(this::toDTO);
     }
 
-    public Page<ResourceTagDTO> findAllByResourceId(Long resourceId, Pageable pageable) {
-        return resourceTagRepository.findAllByResourceId(resourceId, pageable).map(this::toDTO);
-    }
-
-    public Page<ResourceTagDTO> findAllByTagId(Long tagId, Pageable pageable) {
-        return resourceTagRepository.findAllByTagId(tagId, pageable).map(this::toDTO);
-    }
-
-    private ResourceTagDTO toDTO(ResourceTag original) {
+    public ResourceTagDTO toDTO(ResourceTag original) {
         ResourceTagDTO bean = new ResourceTagDTO();
         if (original != null) {
             BeanUtils.copyProperties(original, bean);

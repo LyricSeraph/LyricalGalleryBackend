@@ -13,11 +13,11 @@ import java.nio.file.Path;
 public class StorageConfig {
 
     private Path resourcePath;
-    private Path previewPath;
+    private Path thumbnailPath;
 
     @PostConstruct
     void mkdirPaths() {
-        Path[] dirs = {resourcePath, previewPath};
+        Path[] dirs = {resourcePath, thumbnailPath};
         for (Path path : dirs) {
             if (!path.toFile().exists()) {
                 //noinspection ResultOfMethodCallIgnored

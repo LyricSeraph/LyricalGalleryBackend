@@ -3,7 +3,12 @@ package me.lyriclaw.gallery.entity;
 import lombok.Data;
 import org.springframework.data.jpa.domain.AbstractAuditable_;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -18,8 +23,6 @@ public class Album extends AbstractAuditable_ implements Serializable {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "uuid", nullable = false)
-    private String uuid;
 
     @Column(name = "name", nullable = false)
     private String name;

@@ -1,6 +1,7 @@
 package me.lyriclaw.gallery.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -14,12 +15,11 @@ public class AlbumDTO implements Serializable {
 
     private Long id;
 
-    private String uuid;
-
     private String name;
 
     private Instant createdAt;
 
+    @JsonIgnore
     private Instant updatedAt;
 
 }

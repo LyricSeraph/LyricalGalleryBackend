@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class FfmpegThumbnailGenerator extends AbstractThumbnailGenerator {
 
     private static List<String> SUPPORTED_FORMATS = Arrays.asList(
-            ".gif", ".avi", ".mkv", ".mp4"
+            ".avi", ".mkv", ".mp4"
     );
 
     private final Random random;

@@ -14,8 +14,6 @@ public class AlbumQueryVO implements Serializable {
 
     private Long id;
 
-    private String uuid;
-
     private String name;
 
     private Instant createdAt;

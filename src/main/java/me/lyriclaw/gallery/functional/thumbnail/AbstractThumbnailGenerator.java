@@ -43,7 +43,7 @@ public abstract class AbstractThumbnailGenerator implements ThumbnailGenerator {
     abstract protected BufferedImage getFullSizeThumbnail(File file) throws IOException, ImageReadException;
 
     private File getPreviewFilePath(String filename, PreviewSize size) {
-        return Paths.get(storageConfig.getPreviewPath().toString(), filename + "_" + size.name() + ".png").toFile();
+        return Paths.get(storageConfig.getThumbnailPath().toString(), filename + "_" + size.name() + ".png").toFile();
     }
 
     private Pair<Integer, Integer> getScaleSize(int width, int height, int shortSize) {

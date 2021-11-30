@@ -1,6 +1,7 @@
 package me.lyriclaw.gallery.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -16,8 +17,10 @@ public class TagDTO implements Serializable {
 
     private String name;
 
+    @JsonIgnore
     private Instant createdAt;
 
+    @JsonIgnore
     private Instant updatedAt;
 
 }

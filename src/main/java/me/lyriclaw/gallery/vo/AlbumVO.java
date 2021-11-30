@@ -15,8 +15,6 @@ public class AlbumVO implements Serializable {
 
     private Long id;
 
-    private String uuid;
-
     @NotNull(message = "name can not null")
     private String name;
 

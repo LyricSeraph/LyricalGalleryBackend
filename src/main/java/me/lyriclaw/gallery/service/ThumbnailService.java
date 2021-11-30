@@ -41,7 +41,7 @@ public class ThumbnailService {
     }
 
     public File getPreviewFile(String filename, PreviewSize size) {
-        return Paths.get(storageConfig.getPreviewPath().toString(), filename + "_" + size.name() + ".png").toFile();
+        return Paths.get(storageConfig.getThumbnailPath().toString(), filename + "_" + size.name() + ".png").toFile();
     }
 
 }

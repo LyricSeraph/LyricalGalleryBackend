@@ -1,9 +1,8 @@
 package me.lyriclaw.gallery.service;
 
-import me.lyriclaw.gallery.dto.ResourceTagDTO;
+import me.lyriclaw.gallery.constants.ApiResponseStatus;
 import me.lyriclaw.gallery.dto.TagDTO;
 import me.lyriclaw.gallery.entity.Tag;
-import me.lyriclaw.gallery.constants.ApiResponseStatus;
 import me.lyriclaw.gallery.repo.TagRepository;
 import me.lyriclaw.gallery.throwable.ResponseException;
 import me.lyriclaw.gallery.vo.TagQueryVO;
@@ -12,25 +11,20 @@ import me.lyriclaw.gallery.vo.TagVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class TagService {
 
     private final TagRepository tagRepository;
-    private final ResourceTagService resourceTagService;
 
     @Autowired
-    public TagService(TagRepository tagRepository, ResourceTagService resourceTagService) {
+    public TagService(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
-        this.resourceTagService = resourceTagService;
     }
 
     public Long save(TagVO vO) {
@@ -56,21 +50,11 @@ public class TagService {
         return toDTO(original);
     }
 
-    public Page<TagDTO> query(TagQueryVO vO, Pageable pageable) {
+    public List<TagDTO> query(TagQueryVO vO) {
         Tag queryItem = new Tag();
         BeanUtils.copyProperties(vO, queryItem);
-        return tagRepository.findAll(Example.of(queryItem), pageable).map(this::toDTO);
-    }
-
-    public Page<TagDTO> queryByResourceId(Long tagId, Pageable pageable) {
-        Page<ResourceTagDTO> page = resourceTagService.findAllByTagId(tagId, pageable);
-        List<Long> ids = page.map(ResourceTagDTO::getTagId)
-                .stream()
-                .collect(Collectors.toList());
-        final Map<Long, Tag> tagMap = tagRepository.findAllById(ids)
-                .stream()
-                .collect(Collectors.toMap(Tag::getId, (r) -> r));
-        return page.map(rt -> toDTO(tagMap.getOrDefault(rt.getResourceId(), null)));
+        return tagRepository.findAll(Example.of(queryItem))
+                .stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     private TagDTO toDTO(Tag original) {

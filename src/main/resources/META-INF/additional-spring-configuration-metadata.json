@@ -1,9 +1,9 @@
 {
   "properties": [
     {
-      "name": "me.lyriclaw.gallery.auth-token",
+      "name": "me.lyriclaw.gallery.auth-key",
       "type": "java.lang.String",
-      "description": "Auth token for private APIs."
+      "description": "Authentication key for management purpose."
     },
     {
       "name": "me.lyriclaw.gallery.storage.resource-path",
@@ -14,5 +14,10 @@
       "name": "me.lyriclaw.gallery.storage.preview-path",
       "type": "java.lang.String",
       "description": "Resource preview path."
+    },
+    {
+      "name": "me.lyriclaw.gallery.download.proxy",
+      "type": "java.lang.String",
+      "description": "Resource downloading proxy."
     }
   ] }
