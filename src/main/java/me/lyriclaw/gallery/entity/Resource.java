@@ -2,9 +2,16 @@ package me.lyriclaw.gallery.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.data.relational.core.mapping.MappedCollection;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
@@ -32,6 +39,14 @@ public class Resource implements Serializable {
 
     @Column(name = "source_url")
     private String sourceUrl;
+    @Column(name = "ratio", nullable = false)
+    private Float ratio;
+    @Column(name = "s_thumb")
+    private String sThumb;
+    @Column(name = "m_thumb")
+    private String mThumb;
+    @Column(name = "l_thumb")
+    private String lThumb;
 
     @Column(name = "album_id")
     private Long albumId;

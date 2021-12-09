@@ -24,6 +24,14 @@ public class ResourceVO implements Serializable {
 
     private String sourceUrl;
 
+    private Float ratio;
+
+    private String sThumb;
+
+    private String mThumb;
+
+    private String lThumb;
+
     private Long albumId;
 
     private Integer failedTries;

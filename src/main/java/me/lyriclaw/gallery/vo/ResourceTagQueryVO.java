@@ -12,8 +12,6 @@ import java.time.Instant;
 public class ResourceTagQueryVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long id;
-
     private Long tagId;
 
     private Long resourceId;

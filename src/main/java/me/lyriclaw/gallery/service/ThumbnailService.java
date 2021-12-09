@@ -7,9 +7,13 @@ import me.lyriclaw.gallery.functional.thumbnail.ThumbnailGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -24,13 +28,24 @@ public class ThumbnailService {
         this.generators = generators;
     }
 
-    boolean generateThumbnails(File file) {
+    /**
+     * Generate thunbnails for given file.
+     * @param file
+     *      The given file.
+     * @return
+     *      The generated result. Return null when generate failed.
+     */
+    public ThumbnailGenerator.GenerateThumbnailResult generateThumbnails(File file) {
         for (ThumbnailGenerator generator : generators) {
-            if (generator.supportFile(file) && generator.generateThumbnails(file)) {
-                return true;
+            if (generator.supportFile(file)) {
+                try {
+                    return generator.generateThumbnails(file);
+                } catch (Exception e) {
+                    log.debug("ThumbnailService generateThumbnails throw exception", e);
+                }
             }
         }
-        return false;
+        return null;
     }
 
     boolean deleteThumbnails(String filename) {

@@ -14,6 +14,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 public abstract class AbstractThumbnailGenerator implements ThumbnailGenerator {
@@ -25,19 +27,24 @@ public abstract class AbstractThumbnailGenerator implements ThumbnailGenerator {
     }
 
     @Override
-    public boolean generateThumbnails(File file) {
+    public GenerateThumbnailResult generateThumbnails(File file) {
+        Map<PreviewSize, String> resultMap = new HashMap<>();
+        BufferedImage originImage;
+        float ratio;
         try {
-            BufferedImage originImage = getFullSizeThumbnail(file);
-            if (originImage != null) {
-                for (PreviewSize size : PreviewSize.values()) {
-                    generateThumbnail(getPreviewFilePath(file.getName(), size), originImage, size);
-                }
-                return true;
-            }
+            originImage = getFullSizeThumbnail(file);
+            ratio = 1.0f * originImage.getWidth() / originImage.getHeight();
         } catch (Exception e) {
-            log.warn("ThumbnailService generateThumbnails throw exception", e);
+            log.debug("AbstractThumbnailGenerator generateThumbnails throw exception", e);
+            return null;
         }
-        return false;
+        for (PreviewSize size : PreviewSize.values()) {
+            File targetFile = getPreviewFilePath(file.getName(), size);
+            if (generateThumbnail(targetFile, originImage, size)) {
+                resultMap.put(size, targetFile.getName());
+            }
+        }
+        return new GenerateThumbnailResult(ratio, resultMap);
     }
 
     abstract protected BufferedImage getFullSizeThumbnail(File file) throws IOException, ImageReadException;
@@ -46,27 +53,27 @@ public abstract class AbstractThumbnailGenerator implements ThumbnailGenerator {
         return Paths.get(storageConfig.getThumbnailPath().toString(), filename + "_" + size.name() + ".png").toFile();
     }
 
-    private Pair<Integer, Integer> getScaleSize(int width, int height, int shortSize) {
-        int scaleWidth = shortSize;
-        int scaleHeight = shortSize;
-        if (width < height) {
-            scaleHeight = (int) (1.0f * height / width * scaleWidth);
-        } else {
-            scaleWidth = (int) (1.0f * width / height * scaleHeight);
-        }
-        return Pair.of(scaleWidth, scaleHeight);
+    private Pair<Integer, Integer> getScaleSize(int width, int height, int heightSize) {
+        int scaleWidth = (int) (1.0f * width / height * heightSize);
+        return Pair.of(scaleWidth, heightSize);
     }
 
-    private void generateThumbnail(File targetFile, BufferedImage image, PreviewSize size) throws ImageWriteException, IOException {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        Pair<Integer, Integer> resultWidthHeight = getScaleSize(width, height, size.getSize());
-        int targetWidth = resultWidthHeight.getFirst();
-        int targetHeight = resultWidthHeight.getSecond();
-        Image scaleImage = image.getScaledInstance(targetWidth, targetHeight, Image.SCALE_FAST);
-        BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
-        outputImage.getGraphics().drawImage(scaleImage, 0, 0, null);
-        Imaging.writeImage(outputImage, targetFile, ImageFormats.PNG, null);
+    private boolean generateThumbnail(File targetFile, BufferedImage image, PreviewSize size) {
+        try {
+            int width = image.getWidth();
+            int height = image.getHeight();
+            Pair<Integer, Integer> resultWidthHeight = getScaleSize(width, height, size.getSize());
+            int targetWidth = resultWidthHeight.getFirst();
+            int targetHeight = resultWidthHeight.getSecond();
+            Image scaleImage = image.getScaledInstance(targetWidth, targetHeight, Image.SCALE_FAST);
+            BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
+            outputImage.getGraphics().drawImage(scaleImage, 0, 0, null);
+            Imaging.writeImage(outputImage, targetFile, ImageFormats.PNG, null);
+        } catch (Exception e) {
+            log.debug("AbstractThumbnailGenerator generateThumbnail throw exception", e);
+            return false;
+        }
+        return true;
     }
 
 

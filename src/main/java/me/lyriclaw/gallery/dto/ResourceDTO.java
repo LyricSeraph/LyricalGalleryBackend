@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import me.lyriclaw.gallery.constants.PreviewSize;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -28,6 +29,17 @@ public class ResourceDTO implements Serializable {
 
     @JsonIgnore
     private String sourceUrl;
+
+    private Float ratio;
+
+    @JsonIgnore
+    private String sThumb;
+
+    @JsonIgnore
+    private String mThumb;
+
+    @JsonIgnore
+    private String lThumb;
 
     private Long albumId;
 
@@ -57,15 +69,15 @@ public class ResourceDTO implements Serializable {
     }
 
     public String getSmallThumbnailUrl() {
-        return "/thumbnails/" + getStorageFilename() + "_" + PreviewSize.small + ".png";
+        return "/thumbnails/" + getSThumb();
     }
 
     public String getMediumThumbnailUrl() {
-        return "/thumbnails/" + getStorageFilename() + "_" + PreviewSize.medium + ".png";
+        return "/thumbnails/" + getMThumb();
     }
 
     public String getLargeThumbnailUrl() {
-        return "/thumbnails/" + getStorageFilename() + "_" + PreviewSize.large + ".png";
+        return "/thumbnails/" + getLThumb();
     }
 
 

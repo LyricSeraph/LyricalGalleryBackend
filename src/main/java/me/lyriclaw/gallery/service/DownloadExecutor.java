@@ -3,9 +3,12 @@ package me.lyriclaw.gallery.service;
 import lombok.extern.slf4j.Slf4j;
 import me.lyriclaw.gallery.config.bean.StorageConfig;
 import me.lyriclaw.gallery.constants.DownloadStatus;
+import me.lyriclaw.gallery.constants.PreviewSize;
 import me.lyriclaw.gallery.dto.ResourceDTO;
 import me.lyriclaw.gallery.functional.downloader.HttpUrlDownloader;
+import me.lyriclaw.gallery.functional.thumbnail.ThumbnailGenerator;
 import me.lyriclaw.gallery.utils.FilenameUtils;
+import me.lyriclaw.gallery.vo.ResourceUpdateVO;
 import me.lyriclaw.gallery.vo.ResourceVO;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +49,19 @@ public class DownloadExecutor {
         try {
             File tempFile = File.createTempFile(UUID.randomUUID().toString(), null);
             HttpUrlDownloader downloader = new HttpUrlDownloader(resourceDTO.getSourceUrl(), tempFile);
-            if (downloader.download(client) && storageService.store(downloader.getSavedFile(), resourceDTO.getStorageFilename())) {
-                tempFile.delete();
+            tempFile.delete();
+            if (downloader.download(client)) {
                 resourceService.updateStatusById(resourceDTO.getId(), DownloadStatus.FINISHED);
-                saveSuccess = true;
+                StorageService.StorageResult result = storageService.store(downloader.getSavedFile(), resourceDTO.getStorageFilename());
+                if (result.isSuccess()) {
+                    ThumbnailGenerator.GenerateThumbnailResult generateThumbnailResult = result.getThumbnails();
+                    float ratio = generateThumbnailResult.getRatio();
+                    String sThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.small);
+                    String mThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.medium);
+                    String lThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.large);
+                    resourceService.updateThumbnails(resourceDTO.getId(), ratio, sThumb, mThumb, lThumb);
+                    saveSuccess = true;
+                }
             }
         } catch (Exception e) {
             log.warn("DownloadExecutor executeTask throw exception", e);

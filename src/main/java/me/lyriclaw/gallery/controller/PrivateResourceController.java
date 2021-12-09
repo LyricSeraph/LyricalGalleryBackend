@@ -4,7 +4,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.lyriclaw.gallery.config.bean.StorageConfig;
 import me.lyriclaw.gallery.constants.DownloadStatus;
+import me.lyriclaw.gallery.constants.PreviewSize;
 import me.lyriclaw.gallery.dto.ResourceDTO;
+import me.lyriclaw.gallery.functional.thumbnail.ThumbnailGenerator;
 import me.lyriclaw.gallery.service.ResourceService;
 import me.lyriclaw.gallery.service.StorageService;
 import me.lyriclaw.gallery.utils.FilenameUtils;
@@ -90,7 +92,14 @@ public class PrivateResourceController {
         resourceVO.setStatus(DownloadStatus.FINISHED.getStatusCode());
         Long id = resourceService.save(resourceVO);
         ResourceDTO result = resourceService.getById(id);
-        if (storageService.store(file, result.getStorageFilename())) {
+        StorageService.StorageResult storageResult = storageService.store(file, result.getStorageFilename());
+        if (storageResult.isSuccess()) {
+            ThumbnailGenerator.GenerateThumbnailResult generateThumbnailResult = storageResult.getThumbnails();
+            float ratio = generateThumbnailResult.getRatio();
+            String sThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.small);
+            String mThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.medium);
+            String lThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.large);
+            resourceService.updateThumbnails(id, ratio, sThumb, mThumb, lThumb);
             return ApiResp.success(id);
         } else {
             return ApiResp.error(ApiResponseStatus.STATUS_STORAGE_ERROR);

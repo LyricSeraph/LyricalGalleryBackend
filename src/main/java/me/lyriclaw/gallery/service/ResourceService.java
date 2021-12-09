@@ -71,6 +71,10 @@ public class ResourceService {
         resourceRepository.resetDownloadingTasks();
     }
 
+    @Transactional
+    public void updateThumbnails(@NonNull Long id, float thumbRatio, String sThumb, String mThumb, String lThumb) {
+        resourceRepository.updateThumbnails(id, thumbRatio, sThumb, mThumb, lThumb);
+    }
 
     public ResourceDTO getById(Long id) {
         Resource original = requireOne(id);

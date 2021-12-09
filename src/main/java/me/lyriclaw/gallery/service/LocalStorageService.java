@@ -3,6 +3,7 @@ package me.lyriclaw.gallery.service;
 import lombok.extern.slf4j.Slf4j;
 import me.lyriclaw.gallery.config.bean.StorageConfig;
 import me.lyriclaw.gallery.constants.PreviewSize;
+import me.lyriclaw.gallery.functional.thumbnail.ThumbnailGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -31,31 +32,31 @@ public class LocalStorageService implements StorageService {
     }
 
     @Override
-    public boolean store(MultipartFile file, String filename) {
+    public StorageResult store(MultipartFile file, String filename) {
         File targetFile = getPath(filename).toFile();
         try {
             file.transferTo(targetFile);
-            thumbnailService.generateThumbnails(targetFile);
         } catch (IOException e) {
             log.warn("LocalStorageService store throw exception", e);
-            return false;
+            return new StorageResult(false, null);
         }
-        return true;
+        ThumbnailGenerator.GenerateThumbnailResult result = thumbnailService.generateThumbnails(targetFile);
+        return new StorageResult(result != null, result);
     }
 
     @Override
-    public boolean store(File localFile, String filename) {
+    public StorageResult store(File localFile, String filename) {
         File targetFile = getPath(filename).toFile();
         try {
             FileCopyUtils.copy(localFile, targetFile);
-            thumbnailService.generateThumbnails(targetFile);
         } catch (IOException e) {
             log.warn("LocalStorageService store throw exception", e);
-            return false;
+            return new StorageResult(false, null);
         } finally {
             localFile.delete();
         }
-        return true;
+        ThumbnailGenerator.GenerateThumbnailResult result = thumbnailService.generateThumbnails(targetFile);
+        return new StorageResult(result != null, result);
     }
 
     @Override

@@ -3,13 +3,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="me.lyriclaw.gallery.repo.ResourceRepository">
     <resultMap id="BaseResultMap" type="me.lyriclaw.gallery.entity.Resource">
-        <!--@JPA.Support generated on 2021-11-29 22:35:30.-->
+        <!--@JPA.Support generated on 2021-12-09 04:45:01.-->
         <!--@Table Resource-->
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="uuid" jdbcType="VARCHAR" property="uuid"/>
         <result column="extension" jdbcType="VARCHAR" property="extension"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="source_url" jdbcType="VARCHAR" property="sourceUrl"/>
+        <result column="ratio" jdbcType="FLOAT" property="ratio"/>
+        <result column="s_thumb" jdbcType="VARCHAR" property="sThumb"/>
+        <result column="m_thumb" jdbcType="VARCHAR" property="mThumb"/>
+        <result column="l_thumb" jdbcType="VARCHAR" property="lThumb"/>
         <result column="album_id" jdbcType="BIGINT" property="albumId"/>
         <result column="failed_tries" jdbcType="INTEGER" property="failedTries"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
@@ -17,7 +21,9 @@
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
     </resultMap>
     <sql id="Base_Column_List">
-        <!--@JPA.Support generated on 2021-11-29 22:35:30.-->
-        id, uuid, extension, `name`, source_url, album_id, failed_tries, `status`, created_at, updated_at
-    </sql>
+    <!--@JPA.Support generated on 2021-12-09 04:45:01.-->    id, uuid, extension, `name`, source_url, ratio, s_thumb,
+        m_thumb, l_thumb, album_id, `status`, failed_tries,
+        created_at, updated_at
+    </sql
+    >
 </mapper>
