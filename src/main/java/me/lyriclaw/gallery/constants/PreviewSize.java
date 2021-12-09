@@ -4,7 +4,7 @@ public enum PreviewSize {
 
     small(128),
     medium(256),
-    large(512),
+    large(384),
     ;
 
     private int size;
