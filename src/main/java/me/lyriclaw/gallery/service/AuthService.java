@@ -4,20 +4,19 @@ import me.lyriclaw.gallery.utils.Md5Utils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
-import java.time.temporal.ChronoField;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 @Service
 public class AuthService {
+
+    private static final String AUTH_SALT = "LyricalGallery";
 
     @Value("${me.lyriclaw.gallery.auth-key}")
     private String authKey;
@@ -31,7 +30,7 @@ public class AuthService {
     public boolean isAuthenticated(ServletRequest request) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String tokenString = httpServletRequest.getHeader("TOKEN");
-        return tokenSet.contains(tokenString);
+        return StringUtils.hasLength(tokenString) && tokenSet.contains(tokenString);
     }
 
     @Scheduled(cron = "0 * * * * *")
@@ -42,7 +41,8 @@ public class AuthService {
         for (int i = -2; i <= 2; i++) {
             try {
                 String minutePart = Md5Utils.md5(String.valueOf(currentMinute + i));
-                String token = Md5Utils.md5(minutePart + authKey);
+                String keyPart = Md5Utils.md5(authKey + AUTH_SALT);
+                String token = Md5Utils.md5(minutePart + keyPart);
                 newTokenSet.add(token);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
