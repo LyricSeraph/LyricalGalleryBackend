@@ -75,25 +75,33 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>, JpaSp
                     "from Resource inner join ResourceTag on Resource.id = ResourceTag.resource_id " +
                     "where (:albumId is null or album_id = :albumId) " +
                     "and (:tagId is null or tag_id = :tagId) " +
+                    "and (:status is null or status = :status) " +
                     "and (:name is null or name like %:name%) ",
             countQuery = "select unique count(*) " +
                     "from Resource inner join ResourceTag on Resource.id = resource_id " +
                     "where (:albumId is null or album_id = :albumId) " +
                     "and (:tagId is null or tag_id = :tagId) " +
+                    "and (:status is null or status = :status) " +
                     "and (:name is null or name like %:name%) "
     )
     Page<Resource> findAllBy(@Param("albumId") Long albumId,
                              @Param("tagId") @NonNull Long tagId,
-                             @Param("name") String name, Pageable pageable);
+                             @Param("name") String name,
+                             @Param("status") Integer status,
+                             Pageable pageable);
 
     @Query(nativeQuery = true,
             value = "select * from Resource " +
                     "where (:albumId is null or album_id = :albumId) " +
+                    "and (:status is null or status = :status) " +
                     "and (:name is null or name like %:name%)",
             countQuery = "select count(*) from Resource " +
                     "where (:albumId is null or album_id = :albumId) " +
+                    "and (:status is null or status = :status) " +
                     "and (:name is null or name like %:name%)")
     Page<Resource> findAllBy(@Param("albumId") Long albumId,
-                             @Param("name") String name, Pageable pageable);
+                             @Param("name") String name,
+                             @Param("status") Integer status,
+                             Pageable pageable);
 
 }

@@ -5,7 +5,7 @@ public enum DownloadStatus {
     IDLE(0),
     DOWNLOADING(1),
     FINISHED(2),
-    FAILED(100), // VIRTUAL STATUS
+    FAILED(3),
     ;
 
     private int statusCode;

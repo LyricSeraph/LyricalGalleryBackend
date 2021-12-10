@@ -102,12 +102,12 @@ public class ResourceService {
         return resourceRepository.findAll(Example.of(queryItem), pageable).map(this::toDTO);
     }
 
-    public Page<ResourceDTO> queryByAlbumAndTagAndName(@Nullable Long albumId, @Nullable Long tagId, @Nullable String name, Pageable pageable) {
+    public Page<ResourceDTO> queryByAlbumAndTagAndName(@Nullable Long albumId, @Nullable Long tagId, @Nullable String name, @Nullable Integer status, Pageable pageable) {
         Page<Resource> page;
         if (tagId != null) {
-            page = resourceRepository.findAllBy(albumId, tagId, name, pageable);
+            page = resourceRepository.findAllBy(albumId, tagId, name, status, pageable);
         } else {
-            page = resourceRepository.findAllBy(albumId, name, pageable);
+            page = resourceRepository.findAllBy(albumId, name, status, pageable);
         }
         return page.map(this::toDTO);
     }
