@@ -18,6 +18,8 @@ public class AlbumVO implements Serializable {
     @NotNull(message = "name can not null")
     private String name;
 
+    private Long coverId;
+
     private Instant createdAt;
 
     private Instant updatedAt;

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.NonNull;
 
 public interface ResourceRepository extends JpaRepository<Resource, Long>, JpaSpecificationExecutor<Resource> {
 
@@ -67,7 +68,17 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>, JpaSp
                     "and (:name is null or name like %:name%) "
     )
     Page<Resource> findAllBy(@Param("albumId") Long albumId,
-                             @Param("tagId") Long tagId,
+                             @Param("tagId") @NonNull Long tagId,
+                             @Param("name") String name, Pageable pageable);
+
+    @Query(nativeQuery = true,
+            value = "select * from Resource " +
+                    "where (:albumId is null or album_id = :albumId) " +
+                    "and (:name is null or name like %:name%)",
+            countQuery = "select count(*) from Resource " +
+                    "where (:albumId is null or album_id = :albumId) " +
+                    "and (:name is null or name like %:name%)")
+    Page<Resource> findAllBy(@Param("albumId") Long albumId,
                              @Param("name") String name, Pageable pageable);
 
 }

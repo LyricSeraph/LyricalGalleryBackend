@@ -88,7 +88,12 @@ public class ResourceService {
     }
 
     public Page<ResourceDTO> queryByAlbumAndTagAndName(@Nullable Long albumId, @Nullable Long tagId, @Nullable String name, Pageable pageable) {
-        Page<Resource> page = resourceRepository.findAllBy(albumId, tagId, name, pageable);
+        Page<Resource> page;
+        if (tagId != null) {
+            page = resourceRepository.findAllBy(albumId, tagId, name, pageable);
+        } else {
+            page = resourceRepository.findAllBy(albumId, name, pageable);
+        }
         return page.map(this::toDTO);
     }
 

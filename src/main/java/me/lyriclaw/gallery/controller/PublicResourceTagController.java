@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -31,13 +32,13 @@ public class PublicResourceTagController {
         this.resourceTagService = resourceTagService;
     }
 
-    @GetMapping("/{id}")
+    @RequestMapping(value = "/{id}", method = {RequestMethod.GET})
     @ApiOperation("Retrieve by ID ")
     public ApiResp<ResourceTagDTO> getById(@Valid @NotNull @PathVariable("id") Long id) {
         return ApiResp.success(resourceTagService.getById(id));
     }
 
-    @GetMapping
+    @RequestMapping(value = "", method = {RequestMethod.GET})
     @ApiOperation("Retrieve by query ")
     public ApiResp<Page<ResourceTagDTO>> query(@Valid ResourceTagQueryVO vO,
                                                @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {

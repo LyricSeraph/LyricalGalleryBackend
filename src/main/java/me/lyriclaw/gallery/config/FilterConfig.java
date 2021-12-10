@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class FilterConfig {
 
     @Bean
-    public FilterRegistrationBean<AuthRequiredFilter> loggingFilter(@Autowired AuthRequiredFilter filter){
+    public FilterRegistrationBean<AuthRequiredFilter> authFilterBean(@Autowired AuthRequiredFilter filter){
         FilterRegistrationBean<AuthRequiredFilter> registrationBean
                 = new FilterRegistrationBean<>();
         registrationBean.setFilter(filter);

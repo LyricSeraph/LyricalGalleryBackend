@@ -1,6 +1,10 @@
 package me.lyriclaw.gallery.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 import org.springframework.data.jpa.domain.AbstractAuditable_;
 
 import javax.persistence.Column;
@@ -11,8 +15,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
 @Table(name = "Album")
 public class Album extends AbstractAuditable_ implements Serializable {
@@ -27,10 +35,25 @@ public class Album extends AbstractAuditable_ implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "cover_id")
+    private Long coverId;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
     @Column(name = "updated_at", nullable = false, updatable = false)
     private Instant updatedAt;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Album album = (Album) o;
+        return id != null && Objects.equals(id, album.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

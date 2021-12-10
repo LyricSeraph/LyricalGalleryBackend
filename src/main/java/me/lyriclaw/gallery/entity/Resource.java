@@ -2,6 +2,11 @@ package me.lyriclaw.gallery.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,8 +20,12 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
 @Table(name = "Resource")
 public class Resource implements Serializable {
@@ -72,5 +81,18 @@ public class Resource implements Serializable {
 
     public String getStorageFilename() {
         return getUuid() + getExtension();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Resource resource = (Resource) o;
+        return id != null && Objects.equals(id, resource.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

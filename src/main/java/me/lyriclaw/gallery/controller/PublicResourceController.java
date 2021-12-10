@@ -2,6 +2,7 @@ package me.lyriclaw.gallery.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import me.lyriclaw.gallery.dto.ResourceDTO;
 import me.lyriclaw.gallery.vo.ApiResp;
 import me.lyriclaw.gallery.service.ResourceService;
@@ -20,6 +21,7 @@ import javax.validation.constraints.NotNull;
 @Validated
 @RestController
 @RequestMapping("/public/api/resource")
+@Slf4j
 public class PublicResourceController {
 
     private final ResourceService resourceService;
@@ -28,13 +30,13 @@ public class PublicResourceController {
         this.resourceService = resourceService;
     }
 
-    @GetMapping("/{id}")
+    @RequestMapping(value = "/{id}", method = {RequestMethod.GET})
     @ApiOperation("Retrieve by ID ")
     public ApiResp<ResourceDTO> getById(@Valid @NotNull @PathVariable("id") Long id) {
         return ApiResp.success(resourceService.getById(id));
     }
 
-    @GetMapping
+    @RequestMapping(value = "", method = {RequestMethod.GET})
     @ApiOperation("Retrieve by query ")
     public ApiResp<Page<ResourceDTO>> query(@Valid ResourceQueryVO vO,
                                             @RequestParam(value = "tagId", required = false) Long tagId,

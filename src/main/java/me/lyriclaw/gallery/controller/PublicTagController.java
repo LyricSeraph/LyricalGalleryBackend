@@ -2,6 +2,7 @@ package me.lyriclaw.gallery.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import me.lyriclaw.gallery.dto.TagDTO;
 import me.lyriclaw.gallery.vo.ApiResp;
 import me.lyriclaw.gallery.service.TagService;
@@ -21,6 +22,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/public/api/tag")
+@Slf4j
 public class PublicTagController {
 
     private final TagService tagService;
@@ -29,13 +31,13 @@ public class PublicTagController {
         this.tagService = tagService;
     }
 
-    @GetMapping("/{id}")
+    @RequestMapping(value = "/{id}", method = {RequestMethod.GET})
     @ApiOperation("Retrieve by ID ")
     public ApiResp<TagDTO> getById(@Valid @NotNull @PathVariable("id") Long id) {
         return ApiResp.success(tagService.getById(id));
     }
 
-    @GetMapping
+    @RequestMapping(value = "", method = {RequestMethod.GET})
     @ApiOperation("Retrieve by query ")
     public ApiResp<List<TagDTO>> query(@Valid TagQueryVO vO) {
         return ApiResp.success(tagService.query(vO));

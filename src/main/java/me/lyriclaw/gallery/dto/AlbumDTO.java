@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @ApiModel("")
@@ -17,9 +18,15 @@ public class AlbumDTO implements Serializable {
 
     private String name;
 
+    private Long coverId;
+
     private Instant createdAt;
 
     @JsonIgnore
     private Instant updatedAt;
+
+    private List<ResourceDTO> sampleResources;
+
+    private long albumSize;
 
 }

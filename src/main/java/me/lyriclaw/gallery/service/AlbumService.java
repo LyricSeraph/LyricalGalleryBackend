@@ -1,13 +1,16 @@
 package me.lyriclaw.gallery.service;
 
 import me.lyriclaw.gallery.dto.AlbumDTO;
+import me.lyriclaw.gallery.dto.ResourceDTO;
 import me.lyriclaw.gallery.entity.Album;
 import me.lyriclaw.gallery.constants.ApiResponseStatus;
+import me.lyriclaw.gallery.entity.Resource;
 import me.lyriclaw.gallery.repo.AlbumRepository;
 import me.lyriclaw.gallery.throwable.ResponseException;
 import me.lyriclaw.gallery.vo.AlbumQueryVO;
 import me.lyriclaw.gallery.vo.AlbumUpdateVO;
 import me.lyriclaw.gallery.vo.AlbumVO;
+import me.lyriclaw.gallery.vo.ResourceQueryVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -16,14 +19,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AlbumService {
 
     private final AlbumRepository albumRepository;
+    private final ResourceService resourceService;
 
     @Autowired
-    public AlbumService(AlbumRepository albumRepository) {
+    public AlbumService(AlbumRepository albumRepository, ResourceService resourceService) {
         this.albumRepository = albumRepository;
+        this.resourceService = resourceService;
     }
 
     public Long save(AlbumVO vO) {
@@ -51,9 +59,34 @@ public class AlbumService {
 
     public Page<AlbumDTO> query(AlbumQueryVO vO, Pageable pageable) {
         Album queryItem = new Album();
-        BeanUtils.copyProperties(vO, queryItem);;
-        return albumRepository.findAll(Example.of(queryItem), pageable).map(this::toDTO);
+        BeanUtils.copyProperties(vO, queryItem);
+        return albumRepository.findAll(Example.of(queryItem), pageable)
+                .map(this::toDTO)
+                .map(albumDTO -> {
+                    ResourceQueryVO queryVO = new ResourceQueryVO();
+                    queryVO.setAlbumId(albumDTO.getId());
+                    Page<ResourceDTO> sampleImages = resourceService.query(queryVO, Pageable.ofSize(4));
+                    albumDTO.setAlbumSize(sampleImages.getTotalElements());
+                    albumDTO.setSampleResources(sampleImages.toList());
+                    return albumDTO;
+                });
     }
+
+
+    public Page<AlbumDTO> findByNameLike(String name, Pageable pageable) {
+        return albumRepository.findAllByNameLike(name, pageable)
+                .map(this::toDTO)
+                .map(albumDTO -> {
+                    ResourceQueryVO queryVO = new ResourceQueryVO();
+                    queryVO.setAlbumId(albumDTO.getId());
+                    Page<ResourceDTO> sampleImages = resourceService.query(queryVO, Pageable.ofSize(4));
+                    albumDTO.setAlbumSize(sampleImages.getTotalElements());
+                    albumDTO.setSampleResources(sampleImages.toList());
+                    return albumDTO;
+                });
+    }
+
+
 
     private AlbumDTO toDTO(Album original) {
         AlbumDTO bean = new AlbumDTO();

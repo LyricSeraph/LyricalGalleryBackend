@@ -27,22 +27,13 @@ public class HttpUrlDownloader implements ProgressCallback {
 
     public boolean download(OkHttpClient client) {
         boolean isSuccess = false;
-        BinaryFileDownloader downloader = null;
-        try {
-            downloader = new BinaryFileDownloader(client,
-                    new BinaryFileWriter(new FileOutputStream(this.saveFile), this));
+        try (BinaryFileDownloader downloader = new BinaryFileDownloader(client,
+                new BinaryFileWriter(new FileOutputStream(this.saveFile), this))) {
             isSuccess = downloader.download(url);
             // TODO: download success
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            // TODO: download failed
         } finally {
-            if (downloader != null) {
-                try {
-                    downloader.close();
-                } catch (Exception ignored) {
-                }
-            }
             if (!isSuccess) {
                 this.saveFile.delete();
             }

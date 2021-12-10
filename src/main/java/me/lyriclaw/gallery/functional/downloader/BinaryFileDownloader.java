@@ -23,6 +23,9 @@ public class BinaryFileDownloader implements AutoCloseable {
     public boolean download(String url) throws IOException {
         Request request = new Request.Builder().url(url).build();
         Response response = client.newCall(request).execute();
+        if (response.code() < 200 || response.code() >= 300) {
+            return false;
+        }
         ResponseBody responseBody = response.body();
         if (responseBody == null) {
             return false;

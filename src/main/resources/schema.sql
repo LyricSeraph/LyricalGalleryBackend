@@ -2,6 +2,7 @@ create table if not exists Album
 (
     id bigint unsigned auto_increment primary key ,
     name varchar(64) default '' not null,
+    cover_id bigint unsigned,
     created_at timestamp default current_timestamp() not null,
     updated_at timestamp default current_timestamp() not null on update current_timestamp(),
     constraint id unique (id)
