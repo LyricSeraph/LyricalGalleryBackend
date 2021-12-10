@@ -41,6 +41,21 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>, JpaSp
             value = "update Resource set status = 0 where status = 1")
     void resetDownloadingTasks();
 
+    @Modifying
+    @Query(nativeQuery = true,
+            value = "update Resource set status = 3 where failed_tries > 10")
+    void markFailedTasks();
+
+    @Modifying
+    @Query(nativeQuery = true,
+            value = "update Resource set status = 0, failed_tries = 0 where status = 3")
+    void restoreFailedTasks();
+
+    @Modifying
+    @Query(nativeQuery = true,
+            value = "update Resource set status = 0, failed_tries = 0 where id = :id")
+    void restoreFailedTaskById(@Param("id") @NonNull Long id);
+
     @Query(nativeQuery = true,
             value = "select unique " +
                     "Resource.id as id, " +

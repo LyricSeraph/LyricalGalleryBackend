@@ -106,4 +106,14 @@ public class PrivateResourceController {
         }
     }
 
+    @PostMapping("/restore")
+    @ApiOperation("Restore failed resource")
+    public ApiResp<Boolean> restoreFailed(@RequestParam(value = "id", required = false) Long id) {
+        if (id != null) {
+            resourceService.restoreFailedTaskById(id);
+        } else {
+            resourceService.restoreFailedTasks();
+        }
+        return ApiResp.success();
+    }
 }

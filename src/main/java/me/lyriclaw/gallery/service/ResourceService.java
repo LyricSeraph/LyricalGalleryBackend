@@ -72,6 +72,21 @@ public class ResourceService {
     }
 
     @Transactional
+    public void markFailedTasks() {
+        resourceRepository.markFailedTasks();
+    }
+
+    @Transactional
+    public void restoreFailedTasks() {
+        resourceRepository.restoreFailedTasks();
+    }
+
+    @Transactional
+    public void restoreFailedTaskById(@NonNull Long id) {
+        resourceRepository.restoreFailedTaskById(id);
+    }
+
+    @Transactional
     public void updateThumbnails(@NonNull Long id, float thumbRatio, String sThumb, String mThumb, String lThumb) {
         resourceRepository.updateThumbnails(id, thumbRatio, sThumb, mThumb, lThumb);
     }

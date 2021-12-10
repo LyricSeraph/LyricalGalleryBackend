@@ -6,13 +6,14 @@ import me.lyriclaw.gallery.dto.ResourceDTO;
 import me.lyriclaw.gallery.service.DownloadExecutor;
 import me.lyriclaw.gallery.service.ResourceService;
 import me.lyriclaw.gallery.vo.ResourceQueryVO;
-import me.lyriclaw.gallery.vo.ResourceVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
 
 
 @Component
@@ -41,6 +42,11 @@ public class ResourceDownloadScheduler {
                 }
             }
         } while (!tasks.isEmpty());
+    }
+
+    @Scheduled(fixedDelay = 30, timeUnit = TimeUnit.MINUTES)
+    private void markFailedTasks() {
+        resourceService.markFailedTasks();
     }
 
 }

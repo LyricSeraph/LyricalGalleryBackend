@@ -15,7 +15,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,7 +67,9 @@ public class AlbumService {
                 .map(albumDTO -> {
                     ResourceQueryVO queryVO = new ResourceQueryVO();
                     queryVO.setAlbumId(albumDTO.getId());
-                    Page<ResourceDTO> sampleImages = resourceService.query(queryVO, Pageable.ofSize(4));
+                    queryVO.setStatus(2);
+                    Page<ResourceDTO> sampleImages = resourceService.query(queryVO,
+                            PageRequest.ofSize(4).withSort(Sort.Direction.DESC, "id"));
                     albumDTO.setAlbumSize(sampleImages.getTotalElements());
                     albumDTO.setSampleResources(sampleImages.toList());
                     return albumDTO;
@@ -79,7 +83,10 @@ public class AlbumService {
                 .map(albumDTO -> {
                     ResourceQueryVO queryVO = new ResourceQueryVO();
                     queryVO.setAlbumId(albumDTO.getId());
-                    Page<ResourceDTO> sampleImages = resourceService.query(queryVO, Pageable.ofSize(4));
+                    queryVO.setStatus(2);
+
+                    Page<ResourceDTO> sampleImages = resourceService.query(queryVO,
+                            PageRequest.ofSize(4).withSort(Sort.Direction.DESC, "id"));
                     albumDTO.setAlbumSize(sampleImages.getTotalElements());
                     albumDTO.setSampleResources(sampleImages.toList());
                     return albumDTO;
