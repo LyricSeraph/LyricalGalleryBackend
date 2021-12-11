@@ -14,8 +14,4 @@ public class TagQueryVO implements Serializable {
 
     private String name;
 
-    private Instant createdAt;
-
-    private Instant updatedAt;
-
 }

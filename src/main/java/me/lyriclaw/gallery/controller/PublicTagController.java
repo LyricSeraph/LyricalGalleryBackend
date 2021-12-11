@@ -39,12 +39,11 @@ public class PublicTagController {
 
     @RequestMapping(value = "", method = {RequestMethod.GET})
     @ApiOperation("Retrieve by query ")
-    public ApiResp<List<TagDTO>> query(@Valid TagQueryVO vO) {
-        return ApiResp.success(tagService.query(vO));
-    }
-
-    @RequestMapping(value = "/album/:albumId", method = {RequestMethod.GET})
-    public ApiResp<List<TagDTO>> getTagsByAlbum(@RequestParam("albumId") Long albumId) {
-        return ApiResp.success(tagService.findTagsByAlbum(albumId));
+    public ApiResp<List<TagDTO>> query(@Valid TagQueryVO vO, @RequestParam(value = "albumId", required = false) Long albumId) {
+        if (albumId == null) {
+            return ApiResp.success(tagService.query(vO));
+        } else {
+            return ApiResp.success(tagService.findTagsByAlbumAndName(albumId, vO.getName()));
+        }
     }
 }

@@ -56,7 +56,7 @@ public class AlbumService {
 
     public AlbumDTO getById(Long id) {
         Album original = requireOne(id);
-        return toDTO(original);
+        return fillResourceData(toDTO(original));
     }
 
     public Page<AlbumDTO> query(AlbumQueryVO vO, Pageable pageable) {
@@ -64,36 +64,26 @@ public class AlbumService {
         BeanUtils.copyProperties(vO, queryItem);
         return albumRepository.findAll(Example.of(queryItem), pageable)
                 .map(this::toDTO)
-                .map(albumDTO -> {
-                    ResourceQueryVO queryVO = new ResourceQueryVO();
-                    queryVO.setAlbumId(albumDTO.getAlbumId());
-                    queryVO.setStatus(2);
-                    Page<ResourceDTO> sampleImages = resourceService.query(queryVO,
-                            PageRequest.ofSize(4).withSort(Sort.Direction.DESC, "id"));
-                    albumDTO.setAlbumSize(sampleImages.getTotalElements());
-                    albumDTO.setSampleResources(sampleImages.toList());
-                    return albumDTO;
-                });
+                .map(this::fillResourceData);
     }
 
 
     public Page<AlbumDTO> findByNameLike(String name, Pageable pageable) {
         return albumRepository.findAllByNameLike(name, pageable)
                 .map(this::toDTO)
-                .map(albumDTO -> {
-                    ResourceQueryVO queryVO = new ResourceQueryVO();
-                    queryVO.setAlbumId(albumDTO.getAlbumId());
-                    queryVO.setStatus(2);
-
-                    Page<ResourceDTO> sampleImages = resourceService.query(queryVO,
-                            PageRequest.ofSize(4).withSort(Sort.Direction.DESC, "id"));
-                    albumDTO.setAlbumSize(sampleImages.getTotalElements());
-                    albumDTO.setSampleResources(sampleImages.toList());
-                    return albumDTO;
-                });
+                .map(this::fillResourceData);
     }
 
-
+    private AlbumDTO fillResourceData(AlbumDTO albumDTO) {
+        ResourceQueryVO queryVO = new ResourceQueryVO();
+        queryVO.setAlbumId(albumDTO.getAlbumId());
+        queryVO.setStatus(2);
+        Page<ResourceDTO> sampleImages = resourceService.query(queryVO,
+                PageRequest.ofSize(4).withSort(Sort.Direction.DESC, "resourceId"));
+        albumDTO.setAlbumSize(sampleImages.getTotalElements());
+        albumDTO.setSampleResources(sampleImages.toList());
+        return albumDTO;
+    }
 
     private AlbumDTO toDTO(Album original) {
         AlbumDTO bean = new AlbumDTO();

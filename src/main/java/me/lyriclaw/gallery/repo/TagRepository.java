@@ -13,9 +13,10 @@ public interface TagRepository extends JpaRepository<Tag, Long>, JpaSpecificatio
 
     @Query(nativeQuery = true,
             value = "select * from Tag " +
-                    "where tag_id in " +
+                    "where (:name is null or name like %:name%) " +
+                    "and tag_id in " +
                     "(select unique(tag_id) " +
                     "from ResourceTag inner join Resource on ResourceTag.resource_id = Resource.resource_id " +
                     "where album_id = :albumId)")
-    List<Tag> findAllByAlbumId(@Param("albumId") Long albumId);
+    List<Tag> findTagsByAlbumAndName(@Param("albumId") Long albumId, @Param("name") String name);
 }

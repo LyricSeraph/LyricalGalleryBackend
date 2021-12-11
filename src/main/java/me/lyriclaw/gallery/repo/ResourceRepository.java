@@ -57,13 +57,13 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>, JpaSp
     void restoreFailedTaskById(@Param("id") @NonNull Long id);
 
     @Query(nativeQuery = true,
-            value = "select unique * " +
-                    "from Resource inner join ResourceTag on Resource.resource_id = ResourceTag.resource_id " +
+            value = "select * " +
+                    "from Resource r inner join ResourceTag rt on r.resource_id = rt.resource_id " +
                     "where (:albumId is null or album_id = :albumId) " +
                     "and (:tagId is null or tag_id = :tagId) " +
                     "and (:status is null or status = :status) " +
                     "and (:name is null or name like %:name%) ",
-            countQuery = "select unique count(*) " +
+            countQuery = "select count(*) " +
                     "from Resource inner join ResourceTag on Resource.resource_id = ResourceTag.resource_id " +
                     "where (:albumId is null or album_id = :albumId) " +
                     "and (:tagId is null or tag_id = :tagId) " +

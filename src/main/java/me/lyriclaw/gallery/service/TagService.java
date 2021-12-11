@@ -57,8 +57,8 @@ public class TagService {
                 .stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    public List<TagDTO> findTagsByAlbum(Long albumId) {
-        return tagRepository.findAllByAlbumId(albumId)
+    public List<TagDTO> findTagsByAlbumAndName(Long albumId, String name) {
+        return tagRepository.findTagsByAlbumAndName(albumId, name)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
