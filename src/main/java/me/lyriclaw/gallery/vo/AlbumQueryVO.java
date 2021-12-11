@@ -11,8 +11,11 @@ import java.time.Instant;
 @ApiModel("Retrieve by query ")
 public class AlbumQueryVO implements Serializable {
     private static final long serialVersionUID = 1L;
+    private Long albumId;
 
     private String name;
+
+    private Long coverId;
 
     private Instant createdAt;
 

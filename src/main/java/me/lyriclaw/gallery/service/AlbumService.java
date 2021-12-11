@@ -40,7 +40,7 @@ public class AlbumService {
         Album bean = new Album();
         BeanUtils.copyProperties(vO, bean);
         bean = albumRepository.save(bean);
-        return bean.getId();
+        return bean.getAlbumId();
     }
 
     public void delete(Long id) {
@@ -66,7 +66,7 @@ public class AlbumService {
                 .map(this::toDTO)
                 .map(albumDTO -> {
                     ResourceQueryVO queryVO = new ResourceQueryVO();
-                    queryVO.setAlbumId(albumDTO.getId());
+                    queryVO.setAlbumId(albumDTO.getAlbumId());
                     queryVO.setStatus(2);
                     Page<ResourceDTO> sampleImages = resourceService.query(queryVO,
                             PageRequest.ofSize(4).withSort(Sort.Direction.DESC, "id"));
@@ -82,7 +82,7 @@ public class AlbumService {
                 .map(this::toDTO)
                 .map(albumDTO -> {
                     ResourceQueryVO queryVO = new ResourceQueryVO();
-                    queryVO.setAlbumId(albumDTO.getId());
+                    queryVO.setAlbumId(albumDTO.getAlbumId());
                     queryVO.setStatus(2);
 
                     Page<ResourceDTO> sampleImages = resourceService.query(queryVO,

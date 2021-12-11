@@ -28,9 +28,9 @@ public class Tag implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "tag_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long tagId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -46,7 +46,7 @@ public class Tag implements Serializable {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Tag tag = (Tag) o;
-        return id != null && Objects.equals(id, tag.id);
+        return tagId != null && Objects.equals(tagId, tag.tagId);
     }
 
     @Override

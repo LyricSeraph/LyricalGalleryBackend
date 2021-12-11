@@ -13,7 +13,7 @@ import java.time.Instant;
 public class AlbumVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Long albumId;
 
     @NotNull(message = "name can not null")
     private String name;

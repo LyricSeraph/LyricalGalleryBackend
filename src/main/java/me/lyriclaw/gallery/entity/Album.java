@@ -1,5 +1,6 @@
 package me.lyriclaw.gallery.entity;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -26,11 +27,10 @@ import java.util.Objects;
 public class Album extends AbstractAuditable_ implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "album_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long albumId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -49,7 +49,7 @@ public class Album extends AbstractAuditable_ implements Serializable {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Album album = (Album) o;
-        return id != null && Objects.equals(id, album.id);
+        return albumId != null && Objects.equals(albumId, album.albumId);
     }
 
     @Override

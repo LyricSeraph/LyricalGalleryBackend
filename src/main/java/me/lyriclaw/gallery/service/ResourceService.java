@@ -42,7 +42,7 @@ public class ResourceService {
         Resource bean = new Resource();
         BeanUtils.copyProperties(vO, bean);
         bean = resourceRepository.save(bean);
-        return bean.getId();
+        return bean.getResourceId();
     }
 
     public void delete(Long id) {

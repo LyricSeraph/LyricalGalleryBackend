@@ -30,7 +30,7 @@ public class ResourceTagService {
         ResourceTag bean = new ResourceTag();
         BeanUtils.copyProperties(vO, bean);
         bean = resourceTagRepository.save(bean);
-        return bean.getId();
+        return bean.getRtId();
     }
 
     public void delete(Long id) {

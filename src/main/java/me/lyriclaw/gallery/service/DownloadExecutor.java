@@ -40,7 +40,7 @@ public class DownloadExecutor {
     @Async
     public void executeTask(ResourceDTO resourceDTO) {
         log.debug("DownloadExecutor executeTask: " + "resourceDTO = [" + resourceDTO + "]");
-        resourceService.updateStatusById(resourceDTO.getId(), DownloadStatus.DOWNLOADING);
+        resourceService.updateStatusById(resourceDTO.getResourceId(), DownloadStatus.DOWNLOADING);
         OkHttpClient client = context.getBean(OkHttpClient.class);
         boolean saveSuccess = false;
         try {
@@ -48,7 +48,7 @@ public class DownloadExecutor {
             HttpUrlDownloader downloader = new HttpUrlDownloader(resourceDTO.getSourceUrl(), tempFile);
             tempFile.delete();
             if (downloader.download(client)) {
-                resourceService.updateStatusById(resourceDTO.getId(), DownloadStatus.FINISHED);
+                resourceService.updateStatusById(resourceDTO.getResourceId(), DownloadStatus.FINISHED);
                 StorageService.StorageResult result = storageService.store(downloader.getSavedFile(), resourceDTO.getStorageFilename());
                 if (result.isSuccess()) {
                     ThumbnailGenerator.GenerateThumbnailResult generateThumbnailResult = result.getThumbnails();
@@ -56,7 +56,7 @@ public class DownloadExecutor {
                     String sThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.small);
                     String mThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.medium);
                     String lThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.large);
-                    resourceService.updateThumbnails(resourceDTO.getId(), ratio, sThumb, mThumb, lThumb);
+                    resourceService.updateThumbnails(resourceDTO.getResourceId(), ratio, sThumb, mThumb, lThumb);
                     saveSuccess = true;
                 }
             }
@@ -65,7 +65,7 @@ public class DownloadExecutor {
         }
         log.debug("DownloadExecutor executeTask: " + "saveSuccess = [" + saveSuccess + "]");
         if (!saveSuccess) {
-            resourceService.updateStatusById(resourceDTO.getId(), DownloadStatus.FAILED);
+            resourceService.updateStatusById(resourceDTO.getResourceId(), DownloadStatus.FAILED);
         }
     }
 

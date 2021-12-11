@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.Instant;
 
 @Data
 @ApiModel("Retrieve by query ")

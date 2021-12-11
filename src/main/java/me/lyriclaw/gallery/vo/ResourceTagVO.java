@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.Instant;
 
 
 @Data
@@ -13,7 +12,7 @@ import java.time.Instant;
 public class ResourceTagVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Long rtId;
 
     @NotNull(message = "tagId can not null")
     private Long tagId;

@@ -25,11 +25,10 @@ import java.util.Objects;
 public class ResourceTag implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "rt_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long rtId;
 
     @Column(name = "tag_id", nullable = false, updatable = false)
     private Long tagId;
@@ -42,7 +41,7 @@ public class ResourceTag implements Serializable {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         ResourceTag that = (ResourceTag) o;
-        return id != null && Objects.equals(id, that.id);
+        return rtId != null && Objects.equals(rtId, that.rtId);
     }
 
     @Override

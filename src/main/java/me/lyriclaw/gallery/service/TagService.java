@@ -31,7 +31,7 @@ public class TagService {
         Tag bean = new Tag();
         BeanUtils.copyProperties(vO, bean);
         bean = tagRepository.save(bean);
-        return bean.getId();
+        return bean.getTagId();
     }
 
     public void delete(Long id) {

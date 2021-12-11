@@ -19,7 +19,7 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>, JpaSp
 
     @Modifying
     @Query(nativeQuery = true,
-            value = "update Resource set status = :status where id = :id")
+            value = "update Resource set status = :status where resource_id = :id")
     void updateDownloadResult(@Param("id") Long id, @Param("status") int status);
 
     @Modifying
@@ -29,7 +29,7 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>, JpaSp
                     "s_thumb = :sThumb, " +
                     "m_thumb = :mThumb, " +
                     "l_thumb = :lThumb " +
-                    "where id = :id")
+                    "where resource_id = :id")
     void updateThumbnails(@Param("id") Long id,
                           @Param("ratio") Float ratio,
                           @Param("sThumb") String sThumb,
@@ -53,12 +53,12 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>, JpaSp
 
     @Modifying
     @Query(nativeQuery = true,
-            value = "update Resource set status = 0, failed_tries = 0 where id = :id")
+            value = "update Resource set status = 0, failed_tries = 0 where resource_id = :id")
     void restoreFailedTaskById(@Param("id") @NonNull Long id);
 
     @Query(nativeQuery = true,
             value = "select unique " +
-                    "Resource.id as id, " +
+                    "Resource.resource_id as id, " +
                     "Resource.uuid as uuid, " +
                     "Resource.extension as extension, " +
                     "Resource.name as name, " +
@@ -78,7 +78,7 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>, JpaSp
                     "and (:status is null or status = :status) " +
                     "and (:name is null or name like %:name%) ",
             countQuery = "select unique count(*) " +
-                    "from Resource inner join ResourceTag on Resource.id = resource_id " +
+                    "from Resource inner join ResourceTag on Resource.resource_id = resource_id " +
                     "where (:albumId is null or album_id = :albumId) " +
                     "and (:tagId is null or tag_id = :tagId) " +
                     "and (:status is null or status = :status) " +

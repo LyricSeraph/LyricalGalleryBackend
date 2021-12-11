@@ -12,8 +12,7 @@ import java.time.Instant;
 @ApiModel("Save ")
 public class TagVO implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    private Long id;
+    private Long tagId;
 
     @NotNull(message = "name can not null")
     private String name;

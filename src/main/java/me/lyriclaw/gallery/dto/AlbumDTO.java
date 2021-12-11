@@ -14,7 +14,7 @@ import java.util.List;
 public class AlbumDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Long albumId;
 
     private String name;
 

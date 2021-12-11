@@ -31,11 +31,10 @@ import java.util.Objects;
 public class Resource implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "resource_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long resourceId;
 
     @Column(name = "uuid")
     private String uuid;
@@ -88,7 +87,7 @@ public class Resource implements Serializable {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Resource resource = (Resource) o;
-        return id != null && Objects.equals(id, resource.id);
+        return resourceId != null && Objects.equals(resourceId, resource.resourceId);
     }
 
     @Override
