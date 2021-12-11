@@ -30,20 +30,14 @@ public class ResourceDownloadScheduler {
 
     private final ResourceService resourceService;
     private final ResourceDownloader resourceDownloader;
-    private final ThumbnailService thumbnailService;
-
-    private int executionCount;
 
     public ResourceDownloadScheduler(ResourceService resourceService, ResourceDownloader resourceDownloader, ThumbnailService thumbnailService) {
         this.resourceService = resourceService;
         this.resourceDownloader = resourceDownloader;
-        this.thumbnailService = thumbnailService;
-        executionCount = 0;
     }
 
     @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.SECONDS)
     void downloadSchedule() {
-        log.debug("ResourceDownloadScheduler downloadSchedule: " + executionCount++);
         Page<ResourceDTO> tasks;
         do {
             tasks = getIdleTasks();
