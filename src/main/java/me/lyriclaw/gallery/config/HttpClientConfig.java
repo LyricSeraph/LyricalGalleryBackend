@@ -1,6 +1,7 @@
 package me.lyriclaw.gallery.config;
 
 import lombok.extern.slf4j.Slf4j;
+import me.lyriclaw.gallery.config.bean.HttpDownloaderConfigProps;
 import me.lyriclaw.gallery.functional.downloader.HttpUrlDownloader;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,13 @@ public class HttpClientConfig {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public Proxy createProxy(@Value("${me.lyriclaw.gallery.download.proxy}") String proxyString) {
-        if (!StringUtils.hasLength(proxyString)) {
+    public Proxy createProxy(@Autowired HttpDownloaderConfigProps configProps) {
+        if (!StringUtils.hasLength(configProps.getProxy())) {
             return Proxy.NO_PROXY;
         }
 
         try {
-            URI uri = URI.create(proxyString);
+            URI uri = URI.create(configProps.getProxy());
             SocketAddress sa = new InetSocketAddress(uri.getHost() + uri.getPath(), uri.getPort());
             if (uri.getScheme().startsWith("http") || uri.getScheme().startsWith("https")) {
                 return new Proxy(Proxy.Type.HTTP, sa);
@@ -36,7 +37,7 @@ public class HttpClientConfig {
                 log.warn("Unsupported proxy protocol: " + uri.getScheme());
             }
         } catch (Exception ex) {
-            log.warn("Cannot recognize proxy url: " + proxyString);
+            log.warn("Cannot recognize proxy url: " + configProps.getProxy());
         }
         return Proxy.NO_PROXY;
     }

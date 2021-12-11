@@ -1,30 +1,28 @@
 package me.lyriclaw.gallery.service;
 
 import lombok.extern.slf4j.Slf4j;
-import me.lyriclaw.gallery.config.bean.StorageConfig;
+import me.lyriclaw.gallery.config.bean.StorageConfigProps;
 import me.lyriclaw.gallery.constants.PreviewSize;
 import me.lyriclaw.gallery.functional.thumbnail.ThumbnailGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 @Service
 @Slf4j
 public class ThumbnailService {
 
-    private final StorageConfig storageConfig;
+    private final StorageConfigProps storageConfigProps;
     private final List<ThumbnailGenerator> generators;
 
     @Autowired
-    public ThumbnailService(StorageConfig storageConfig, List<ThumbnailGenerator> generators) {
-        this.storageConfig = storageConfig;
+    public ThumbnailService(StorageConfigProps storageConfigProps, List<ThumbnailGenerator> generators) {
+        this.storageConfigProps = storageConfigProps;
         this.generators = generators;
     }
 
@@ -56,7 +54,7 @@ public class ThumbnailService {
     }
 
     public File getPreviewFile(String filename, PreviewSize size) {
-        return Paths.get(storageConfig.getThumbnailPath().toString(), filename + "_" + size.name() + ".png").toFile();
+        return Paths.get(storageConfigProps.getThumbnailPath().toString(), filename + "_" + size.name() + ".png").toFile();
     }
 
 }

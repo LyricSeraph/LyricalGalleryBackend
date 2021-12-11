@@ -40,7 +40,7 @@ public class PublicResourceController {
     @ApiOperation("Retrieve by query ")
     public ApiResp<Page<ResourceDTO>> query(@Valid ResourceQueryVO vO,
                                             @RequestParam(value = "tagId", required = false) Long tagId,
-                                            @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        return ApiResp.success(resourceService.queryByAlbumAndTagAndName(vO.getAlbumId(), tagId, vO.getName(), vO.getStatus(), pageable));
+                                            @PageableDefault(page = 0, size = 20, sort = "resource_id", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ApiResp.success(resourceService.queryBy(vO.getAlbumId(), tagId, vO.getName(), vO.getStatus(), pageable));
     }
 }

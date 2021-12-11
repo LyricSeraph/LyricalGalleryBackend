@@ -13,7 +13,7 @@ create table if not exists Resource
     resource_id bigint unsigned auto_increment primary key,
     uuid varchar(36) unique default uuid(),
     extension varchar(10) default '' not null,
-    name varchar(64) default '' not null,
+    name varchar(256) default '' not null,
     source_url varchar(1024),
     album_id bigint unsigned,
     ratio float default 1 not null,

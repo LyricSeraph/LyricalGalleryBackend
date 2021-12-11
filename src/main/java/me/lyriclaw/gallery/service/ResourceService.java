@@ -1,11 +1,10 @@
 package me.lyriclaw.gallery.service;
 
 import lombok.extern.slf4j.Slf4j;
+import me.lyriclaw.gallery.constants.ApiResponseStatus;
 import me.lyriclaw.gallery.constants.DownloadStatus;
 import me.lyriclaw.gallery.dto.ResourceDTO;
-import me.lyriclaw.gallery.dto.ResourceTagDTO;
 import me.lyriclaw.gallery.entity.Resource;
-import me.lyriclaw.gallery.constants.ApiResponseStatus;
 import me.lyriclaw.gallery.repo.ResourceRepository;
 import me.lyriclaw.gallery.throwable.ResponseException;
 import me.lyriclaw.gallery.vo.ResourceQueryVO;
@@ -21,8 +20,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -102,7 +99,7 @@ public class ResourceService {
         return resourceRepository.findAll(Example.of(queryItem), pageable).map(this::toDTO);
     }
 
-    public Page<ResourceDTO> queryByAlbumAndTagAndName(@Nullable Long albumId, @Nullable Long tagId, @Nullable String name, @Nullable Integer status, Pageable pageable) {
+    public Page<ResourceDTO> queryBy(@Nullable Long albumId, @Nullable Long tagId, @Nullable String name, @Nullable Integer status, Pageable pageable) {
         Page<Resource> page;
         if (tagId != null) {
             page = resourceRepository.findAllBy(albumId, tagId, name, status, pageable);

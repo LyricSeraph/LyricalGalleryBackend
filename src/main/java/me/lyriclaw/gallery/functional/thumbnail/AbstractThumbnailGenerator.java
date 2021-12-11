@@ -1,11 +1,10 @@
 package me.lyriclaw.gallery.functional.thumbnail;
 
 import lombok.extern.slf4j.Slf4j;
-import me.lyriclaw.gallery.config.bean.StorageConfig;
+import me.lyriclaw.gallery.config.bean.StorageConfigProps;
 import me.lyriclaw.gallery.constants.PreviewSize;
 import org.apache.commons.imaging.ImageFormats;
 import org.apache.commons.imaging.ImageReadException;
-import org.apache.commons.imaging.ImageWriteException;
 import org.apache.commons.imaging.Imaging;
 import org.springframework.data.util.Pair;
 
@@ -16,14 +15,17 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 @Slf4j
 public abstract class AbstractThumbnailGenerator implements ThumbnailGenerator {
 
-    private final StorageConfig storageConfig;
+    private final StorageConfigProps storageConfigProps;
 
-    protected AbstractThumbnailGenerator(StorageConfig storageConfig) {
-        this.storageConfig = storageConfig;
+    protected AbstractThumbnailGenerator(StorageConfigProps storageConfigProps) {
+        this.storageConfigProps = storageConfigProps;
     }
 
     @Override
@@ -50,7 +52,7 @@ public abstract class AbstractThumbnailGenerator implements ThumbnailGenerator {
     abstract protected BufferedImage getFullSizeThumbnail(File file) throws IOException, ImageReadException;
 
     private File getPreviewFilePath(String filename, PreviewSize size) {
-        return Paths.get(storageConfig.getThumbnailPath().toString(), filename + "_" + size.name() + ".png").toFile();
+        return Paths.get(storageConfigProps.getThumbnailPath().toString(), filename + "_" + size.name() + ".png").toFile();
     }
 
     private Pair<Integer, Integer> getScaleSize(int width, int height, int heightSize) {

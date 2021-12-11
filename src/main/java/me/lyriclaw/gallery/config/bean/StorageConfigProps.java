@@ -8,9 +8,9 @@ import javax.annotation.PostConstruct;
 import java.nio.file.Path;
 
 @Configuration
-@ConfigurationProperties(prefix = "me.lyriclaw.gallery.storage")
+@ConfigurationProperties(prefix = "project.storage")
 @Data
-public class StorageConfig {
+public class StorageConfigProps {
 
     private Path resourcePath;
     private Path thumbnailPath;

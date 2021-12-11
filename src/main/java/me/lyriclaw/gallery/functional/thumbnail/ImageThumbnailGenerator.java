@@ -1,17 +1,12 @@
 package me.lyriclaw.gallery.functional.thumbnail;
 
 import lombok.extern.slf4j.Slf4j;
-import me.lyriclaw.gallery.config.bean.StorageConfig;
-import me.lyriclaw.gallery.constants.PreviewSize;
-import org.apache.commons.imaging.ImageFormats;
+import me.lyriclaw.gallery.config.bean.StorageConfigProps;
 import org.apache.commons.imaging.ImageReadException;
-import org.apache.commons.imaging.ImageWriteException;
 import org.apache.commons.imaging.Imaging;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +22,8 @@ public class ImageThumbnailGenerator extends AbstractThumbnailGenerator {
     );
 
     @Autowired
-    public ImageThumbnailGenerator(StorageConfig storageConfig) {
-        super(storageConfig);
+    public ImageThumbnailGenerator(StorageConfigProps storageConfigProps) {
+        super(storageConfigProps);
     }
 
     @Override

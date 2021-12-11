@@ -1,8 +1,7 @@
 package me.lyriclaw.gallery.service;
 
 import lombok.extern.slf4j.Slf4j;
-import me.lyriclaw.gallery.config.bean.StorageConfig;
-import me.lyriclaw.gallery.constants.PreviewSize;
+import me.lyriclaw.gallery.config.bean.StorageConfigProps;
 import me.lyriclaw.gallery.functional.thumbnail.ThumbnailGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,16 +18,16 @@ import java.nio.file.Paths;
 public class LocalStorageService implements StorageService {
 
     private final ThumbnailService thumbnailService;
-    private final StorageConfig storageConfig;
+    private final StorageConfigProps storageConfigProps;
 
     @Autowired
-    public LocalStorageService(ThumbnailService thumbnailService, StorageConfig storageConfig) {
+    public LocalStorageService(ThumbnailService thumbnailService, StorageConfigProps storageConfigProps) {
         this.thumbnailService = thumbnailService;
-        this.storageConfig = storageConfig;
+        this.storageConfigProps = storageConfigProps;
     }
 
     public Path getPath(String filename) {
-        return Paths.get(storageConfig.getResourcePath().toString(), filename);
+        return Paths.get(storageConfigProps.getResourcePath().toString(), filename);
     }
 
     @Override

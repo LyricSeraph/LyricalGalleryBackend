@@ -1,7 +1,7 @@
 package me.lyriclaw.gallery.functional.thumbnail;
 
 import lombok.extern.slf4j.Slf4j;
-import me.lyriclaw.gallery.config.bean.StorageConfig;
+import me.lyriclaw.gallery.config.bean.StorageConfigProps;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +32,8 @@ public class FfmpegThumbnailGenerator extends AbstractThumbnailGenerator {
     private final Random random;
 
     @Autowired
-    protected FfmpegThumbnailGenerator(StorageConfig storageConfig) {
-        super(storageConfig);
+    protected FfmpegThumbnailGenerator(StorageConfigProps storageConfigProps) {
+        super(storageConfigProps);
         random = new Random();
     }
 

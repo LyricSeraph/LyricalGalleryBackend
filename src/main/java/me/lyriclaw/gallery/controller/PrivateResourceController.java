@@ -2,7 +2,8 @@ package me.lyriclaw.gallery.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import me.lyriclaw.gallery.config.bean.StorageConfig;
+import lombok.extern.slf4j.Slf4j;
+import me.lyriclaw.gallery.config.bean.StorageConfigProps;
 import me.lyriclaw.gallery.constants.DownloadStatus;
 import me.lyriclaw.gallery.constants.PreviewSize;
 import me.lyriclaw.gallery.dto.ResourceDTO;
@@ -12,6 +13,7 @@ import me.lyriclaw.gallery.service.StorageService;
 import me.lyriclaw.gallery.utils.FilenameUtils;
 import me.lyriclaw.gallery.vo.ApiResp;
 import me.lyriclaw.gallery.constants.ApiResponseStatus;
+import me.lyriclaw.gallery.vo.ResourceDownloadVO;
 import me.lyriclaw.gallery.vo.ResourceUpdateVO;
 import me.lyriclaw.gallery.vo.ResourceVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +32,14 @@ import java.util.UUID;
 @Validated
 @RestController
 @RequestMapping("/private/api/resource")
+@Slf4j
 public class PrivateResourceController {
 
     private final ResourceService resourceService;
     private final StorageService storageService;
 
     @Autowired
-    public PrivateResourceController(ResourceService resourceService, StorageService storageService, StorageConfig storageConfig) {
+    public PrivateResourceController(ResourceService resourceService, StorageService storageService, StorageConfigProps storageConfigProps) {
         this.resourceService = resourceService;
         this.storageService = storageService;
     }
@@ -60,18 +63,23 @@ public class PrivateResourceController {
 
     @PostMapping("/download")
     @ApiOperation("Download ")
-    public ApiResp<Long> download(@Valid @RequestBody ResourceVO vO) {
-        if (StringUtils.hasLength(vO.getSourceUrl())) {
-            URI uri = URI.create(vO.getSourceUrl());
-            String originFilename = Paths.get(uri).getFileName().toString();
+    public ApiResp<Long> download(@Valid @RequestBody ResourceDownloadVO vO) {
+        if (StringUtils.hasLength(vO.getUrl())) {
+            URI uri = URI.create(vO.getUrl());
+            String originFilename = Paths.get(uri.getPath()).getFileName().toString();
             String extension = FilenameUtils.getExtension(originFilename);
             ResourceVO resourceVO = new ResourceVO();
             resourceVO.setUuid(UUID.randomUUID().toString());
             resourceVO.setExtension(extension);
-            resourceVO.setName(originFilename);
-            resourceVO.setSourceUrl(vO.getSourceUrl());
+            if (StringUtils.hasLength(vO.getName())) {
+                resourceVO.setName(vO.getName());
+            } else {
+                resourceVO.setName(originFilename);
+            }
+            resourceVO.setSourceUrl(vO.getUrl());
             resourceVO.setAlbumId(vO.getAlbumId());
             resourceVO.setStatus(DownloadStatus.IDLE.getStatusCode());
+            resourceVO.setRatio(1F);
             Long id = resourceService.save(resourceVO);
             return ApiResp.success(id);
         }

@@ -2,7 +2,7 @@ package me.lyriclaw.gallery.controller;
 
 import eu.medsea.mimeutil.MimeUtil;
 import lombok.extern.slf4j.Slf4j;
-import me.lyriclaw.gallery.config.bean.StorageConfig;
+import me.lyriclaw.gallery.config.bean.StorageConfigProps;
 import me.lyriclaw.gallery.constants.LocalFileResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -22,12 +22,12 @@ import java.util.Collection;
 @Slf4j
 public class LocalFileController {
 
-    private final StorageConfig storageConfig;
+    private final StorageConfigProps storageConfigProps;
     private final ResourceLoader resourceLoader;
 
     @Autowired
-    public LocalFileController(StorageConfig storageConfig, ResourceLoader resourceLoader) {
-        this.storageConfig = storageConfig;
+    public LocalFileController(StorageConfigProps storageConfigProps, ResourceLoader resourceLoader) {
+        this.storageConfigProps = storageConfigProps;
         this.resourceLoader = resourceLoader;
         MimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.MagicMimeMimeDetector");
     }
@@ -45,10 +45,10 @@ public class LocalFileController {
         Path baseDirectory = null;
         switch (type) {
             case resources:
-                baseDirectory = storageConfig.getResourcePath();
+                baseDirectory = storageConfigProps.getResourcePath();
                 break;
             case thumbnails:
-                baseDirectory = storageConfig.getThumbnailPath();
+                baseDirectory = storageConfigProps.getThumbnailPath();
                 break;
         }
         Path path = Paths.get(baseDirectory.toString(), filename);

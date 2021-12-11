@@ -33,8 +33,6 @@ public class AuthRequiredFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        log.debug("doFilter: " +
-                "request = [" + request + "], response = [" + response + "], chain = [" + chain + "]");
         if (!authService.isAuthenticated(request)) {
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
             httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());

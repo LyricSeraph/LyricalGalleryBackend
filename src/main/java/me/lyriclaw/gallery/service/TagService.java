@@ -57,6 +57,10 @@ public class TagService {
                 .stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+    public List<TagDTO> findTagsByAlbum(Long albumId) {
+        return tagRepository.findAllByAlbumId(albumId);
+    }
+
     private TagDTO toDTO(Tag original) {
         TagDTO bean = new TagDTO();
         if (original != null) {
@@ -69,4 +73,5 @@ public class TagService {
         return tagRepository.findById(id)
                 .orElseThrow(() -> new ResponseException(ApiResponseStatus.STATUS_NOT_FOUND, "Tag not found: " + id));
     }
+
 }

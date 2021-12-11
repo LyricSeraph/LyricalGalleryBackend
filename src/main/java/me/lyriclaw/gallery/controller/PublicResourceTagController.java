@@ -41,7 +41,7 @@ public class PublicResourceTagController {
     @RequestMapping(value = "", method = {RequestMethod.GET})
     @ApiOperation("Retrieve by query ")
     public ApiResp<Page<ResourceTagDTO>> query(@Valid ResourceTagQueryVO vO,
-                                               @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+                                               @PageableDefault(page = 0, size = 20, sort = "rtId", direction = Sort.Direction.DESC) Pageable pageable) {
         return ApiResp.success(resourceTagService.query(vO, pageable));
     }
 

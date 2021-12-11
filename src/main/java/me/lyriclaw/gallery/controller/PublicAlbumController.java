@@ -41,7 +41,7 @@ public class PublicAlbumController {
     @RequestMapping(value = "", method = {RequestMethod.GET})
     @ApiOperation("Retrieve by query ")
     public ApiResp<Page<AlbumDTO>> query(@Valid AlbumQueryVO vO,
-                                         @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+                                         @PageableDefault(page = 0, size = 20, sort = "album_id", direction = Sort.Direction.DESC) Pageable pageable) {
         return ApiResp.success(albumService.findByNameLike(vO.getName(), pageable));
     }
 }
