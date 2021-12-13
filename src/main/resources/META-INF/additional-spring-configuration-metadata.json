@@ -1,23 +1,28 @@
 {
   "properties": [
     {
-      "name": "project.auth-key",
+      "name": "project.auth.auth-key",
       "type": "java.lang.String",
       "description": "Authentication key for management purpose."
     },
     {
       "name": "project.storage.resource-path",
       "type": "java.lang.String",
-      "description": "Resource storage path."
+      "description": "Storage directory for resources."
     },
     {
-      "name": "project.storage.preview-path",
+      "name": "project.storage.thumbnail-path",
       "type": "java.lang.String",
-      "description": "Resource preview path."
+      "description": "Storage directory for thumbnails of resources."
     },
     {
       "name": "project.downloader.proxy",
       "type": "java.lang.String",
       "description": "Resource downloading proxy."
+    },
+    {
+      "name": "project.front-end.dist-path",
+      "type": "java.lang.String",
+      "description": "Path to frontend dist directory."
     }
   ] }

@@ -24,6 +24,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     private Environment environment;
 
     @Value("${project.front-end.dist-path}")
-    private String frontEndDistPath;
+    private Path frontEndDistPath;
 
     @Bean
     @Profile("!production")
@@ -97,7 +98,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                     .addResourceLocations("classpath:/META-INF/resources/webjars/");
         }
         registry.addResourceHandler("/static/dist/**")
-                .addResourceLocations("file:" + frontEndDistPath);
+                .addResourceLocations("file:" + frontEndDistPath.toString());
     }
 
     @Override
