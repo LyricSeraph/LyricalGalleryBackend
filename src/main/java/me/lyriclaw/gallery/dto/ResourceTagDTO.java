@@ -12,7 +12,6 @@ import java.io.Serializable;
 public class ResourceTagDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonIgnore
     private Long rtId;
 
     private Long tagId;

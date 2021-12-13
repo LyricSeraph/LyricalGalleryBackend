@@ -88,7 +88,7 @@ public class PrivateResourceController {
 
     @PostMapping("/upload")
     @ApiOperation("Upload ")
-    public ApiResp<Long> upload(@RequestParam("file") MultipartFile file, @RequestParam(value = "album", required = false) Long albumId) {
+    public ApiResp<ResourceDTO> upload(@RequestParam("file") MultipartFile file, @RequestParam(value = "album", required = false) Long albumId) {
         String originFilename = file.getOriginalFilename();
         String extension = FilenameUtils.getExtension(originFilename);
         ResourceVO resourceVO = new ResourceVO();
@@ -97,6 +97,7 @@ public class PrivateResourceController {
         resourceVO.setName(originFilename);
         resourceVO.setSourceUrl(null);
         resourceVO.setAlbumId(albumId);
+        resourceVO.setRatio(1F);
         resourceVO.setStatus(DownloadStatus.FINISHED.getStatusCode());
         Long id = resourceService.save(resourceVO);
         ResourceDTO result = resourceService.getById(id);
@@ -108,7 +109,7 @@ public class PrivateResourceController {
             String mThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.medium);
             String lThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.large);
             resourceService.updateThumbnails(id, ratio, sThumb, mThumb, lThumb);
-            return ApiResp.success(id);
+            return ApiResp.success(resourceService.getById(id));
         } else {
             return ApiResp.error(ApiResponseStatus.STATUS_STORAGE_ERROR);
         }
