@@ -1,9 +1,13 @@
 package me.lyriclaw.gallery.config;
 
 import com.google.common.collect.Lists;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.SortHandlerMethodArgumentResolver;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
@@ -20,6 +24,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static springfox.documentation.builders.PathSelectors.regex;
@@ -28,6 +33,12 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @EnableSwagger2
 @EnableSpringDataWebSupport
 public class WebMvcConfig extends WebMvcConfigurationSupport {
+
+    @Autowired
+    private Environment environment;
+
+    @Value("${project.front-end.dist-path}")
+    private String frontEndDistPath;
 
     @Bean
     @Profile("!production")
@@ -77,11 +88,16 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     }
 
     @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    protected void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
+        boolean isProduction = Arrays.asList(environment.getActiveProfiles()).contains("production");
+        if (!isProduction) {
+            registry.addResourceHandler("swagger-ui.html")
+                    .addResourceLocations("classpath:/META-INF/resources/");
+            registry.addResourceHandler("/webjars/**")
+                    .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        }
+        registry.addResourceHandler("/static/dist/**")
+                .addResourceLocations("file:" + frontEndDistPath);
     }
 
     @Override
