@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.UUID;
 
@@ -57,26 +58,28 @@ public class PrivateResourceController {
     @PostMapping("/download")
     @ApiOperation("Download ")
     public ApiResp<ResourceDTO> download(@Valid @RequestBody ResourceDownloadVO vO) {
-        if (StringUtils.hasLength(vO.getUrl())) {
-            URI uri = URI.create(vO.getUrl());
-            String originFilename = Paths.get(uri.getPath()).getFileName().toString();
-            String extension = FilenameUtils.getExtension(originFilename);
-            ResourceVO resourceVO = new ResourceVO();
-            resourceVO.setUuid(UUID.randomUUID().toString());
-            resourceVO.setExtension(extension);
-            if (StringUtils.hasLength(vO.getName())) {
-                resourceVO.setName(vO.getName());
-            } else {
-                resourceVO.setName(originFilename);
-            }
-            resourceVO.setSourceUrl(vO.getUrl());
-            resourceVO.setAlbumId(vO.getAlbumId());
-            resourceVO.setStatus(DownloadStatus.IDLE.getStatusCode());
-            resourceVO.setRatio(1F);
-            Long id = resourceService.save(resourceVO);
-            return ApiResp.success(resourceService.getById(id));
+        URL url;
+        try {
+            url = new URL(vO.getUrl());
+        } catch (Exception ignored) {
+            return ApiResp.error(ApiResponseStatus.STATUS_PARAMETER_INVALID);
         }
-        return ApiResp.error(ApiResponseStatus.STATUS_PARAMETER_INVALID);
+        String originFilename = Paths.get(url.getPath()).getFileName().toString();
+        String extension = FilenameUtils.getExtension(originFilename);
+        ResourceVO resourceVO = new ResourceVO();
+        resourceVO.setUuid(UUID.randomUUID().toString());
+        resourceVO.setExtension(extension);
+        if (StringUtils.hasLength(vO.getName())) {
+            resourceVO.setName(vO.getName());
+        } else {
+            resourceVO.setName(originFilename);
+        }
+        resourceVO.setSourceUrl(vO.getUrl());
+        resourceVO.setAlbumId(vO.getAlbumId());
+        resourceVO.setStatus(DownloadStatus.IDLE.getStatusCode());
+        resourceVO.setRatio(1F);
+        Long id = resourceService.save(resourceVO);
+        return ApiResp.success(resourceService.getById(id));
     }
 
     @PostMapping("/upload")

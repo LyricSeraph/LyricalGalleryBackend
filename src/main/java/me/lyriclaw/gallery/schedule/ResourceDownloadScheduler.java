@@ -16,9 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -54,7 +52,7 @@ public class ResourceDownloadScheduler {
                     Future<StorageService.StorageResult> future = entry.getValue();
                     try {
                         StorageService.StorageResult r = future.get();
-                        if (r.isSuccess()) {
+                        if (r != null && r.getThumbnails() != null) {
                             ThumbnailGenerator.GenerateThumbnailResult generateThumbnailResult = r.getThumbnails();
                             float ratio = generateThumbnailResult.getRatio();
                             String sThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.small);
@@ -62,7 +60,9 @@ public class ResourceDownloadScheduler {
                             String lThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.large);
                             resourceService.updateThumbnails(id, ratio, sThumb, mThumb, lThumb);
                         }
-                        success = true;
+                        if (r != null && r.isSuccess()) {
+                            success = true;
+                        }
                     } catch (InterruptedException | ExecutionException e) {
                         log.debug("ResourceDownloadScheduler downloadSchedule throw exception", e);
                     }
@@ -77,13 +77,6 @@ public class ResourceDownloadScheduler {
         query.setStatus(DownloadStatus.IDLE.getStatusCode());
         return resourceService.query(query, PageRequest.of(0, 5)
                 .withSort(Sort.by(Sort.Direction.ASC, "updatedAt", "createdAt")));
-    }
-
-
-
-    @Scheduled(fixedDelay = 30, timeUnit = TimeUnit.MINUTES)
-    private void markFailedTasks() {
-        resourceService.markFailedTasks();
     }
 
 }

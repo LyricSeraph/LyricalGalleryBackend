@@ -14,7 +14,8 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>, JpaSp
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query(nativeQuery = true,
-            value = "update Resource set failed_tries = failed_tries + 1, status = 0 where resource_id = :id")
+            value = "update Resource set failed_tries = failed_tries + 1, " +
+                    "status = IF(failed_tries > 10, 3, 0) where resource_id = :id")
     void updateDownloadFailed(@Param("id") Long id);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
