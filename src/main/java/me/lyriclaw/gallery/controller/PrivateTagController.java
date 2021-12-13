@@ -2,6 +2,7 @@ package me.lyriclaw.gallery.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import me.lyriclaw.gallery.dto.TagDTO;
 import me.lyriclaw.gallery.vo.ApiResp;
 import me.lyriclaw.gallery.service.TagService;
 import me.lyriclaw.gallery.vo.TagUpdateVO;
@@ -26,8 +27,16 @@ public class PrivateTagController {
 
     @PostMapping
     @ApiOperation("Save ")
-    public ApiResp<Long> save(@Valid @RequestBody TagVO vO) {
-        return ApiResp.success(tagService.save(vO));
+    public ApiResp<TagDTO> save(@Valid @RequestBody TagVO vO) {
+        Long id = tagService.save(vO);
+        return ApiResp.success(tagService.getById(id));
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation("Update ")
+    public ApiResp<TagDTO> update(@Valid @NotNull @PathVariable("id") Long id, @Valid @RequestBody TagUpdateVO vO) {
+        tagService.update(id, vO);
+        return ApiResp.success(tagService.getById(id));
     }
 
     @DeleteMapping("/{id}")

@@ -72,7 +72,7 @@ public class TagService {
         return bean;
     }
 
-    private Tag requireOne(Long id) {
+    public Tag requireOne(Long id) {
         return tagRepository.findById(id)
                 .orElseThrow(() -> new ResponseException(ApiResponseStatus.STATUS_NOT_FOUND, "Tag not found: " + id));
     }

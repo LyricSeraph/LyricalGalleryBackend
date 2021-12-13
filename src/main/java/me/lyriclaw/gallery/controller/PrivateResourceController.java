@@ -3,18 +3,19 @@ package me.lyriclaw.gallery.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import me.lyriclaw.gallery.config.bean.StorageConfigProps;
 import me.lyriclaw.gallery.constants.DownloadStatus;
 import me.lyriclaw.gallery.constants.PreviewSize;
 import me.lyriclaw.gallery.dto.ResourceDTO;
-import me.lyriclaw.gallery.entity.Resource;
+import me.lyriclaw.gallery.dto.ResourceTagDTO;
 import me.lyriclaw.gallery.functional.thumbnail.ThumbnailGenerator;
 import me.lyriclaw.gallery.service.ResourceService;
+import me.lyriclaw.gallery.service.ResourceTagService;
 import me.lyriclaw.gallery.service.StorageService;
 import me.lyriclaw.gallery.utils.FilenameUtils;
 import me.lyriclaw.gallery.vo.ApiResp;
 import me.lyriclaw.gallery.constants.ApiResponseStatus;
 import me.lyriclaw.gallery.vo.ResourceDownloadVO;
+import me.lyriclaw.gallery.vo.ResourceTagVO;
 import me.lyriclaw.gallery.vo.ResourceUpdateVO;
 import me.lyriclaw.gallery.vo.ResourceVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.net.URI;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -39,11 +39,13 @@ public class PrivateResourceController {
 
     private final ResourceService resourceService;
     private final StorageService storageService;
+    private final ResourceTagService resourceTagService;
 
     @Autowired
-    public PrivateResourceController(ResourceService resourceService, StorageService storageService) {
+    public PrivateResourceController(ResourceService resourceService, StorageService storageService, ResourceTagService resourceTagService) {
         this.resourceService = resourceService;
         this.storageService = storageService;
+        this.resourceTagService = resourceTagService;
     }
 
     @DeleteMapping("/{id}")
@@ -61,6 +63,26 @@ public class PrivateResourceController {
         resourceService.update(id, vO);
         return ApiResp.success(resourceService.getById(id));
     }
+
+    @PostMapping("/{id}/tag/{tagId}")
+    @ApiOperation("Add tag to resource")
+    public ApiResp<ResourceTagDTO> addTag(@Valid @NotNull @PathVariable("id") Long id,
+                                          @Valid @NotNull @PathVariable("tagId") Long tagId) {
+        ResourceTagVO resourceTagVO = new ResourceTagVO();
+        resourceTagVO.setResourceId(id);
+        resourceTagVO.setTagId(tagId);
+        Long rtId = resourceTagService.save(resourceTagVO);
+        return ApiResp.success(resourceTagService.getById(rtId));
+    }
+
+    @DeleteMapping("/{id}/tag/{tagId}")
+    @ApiOperation("Delete tag to resource")
+    public ApiResp<Object> deleteTag(@Valid @NotNull @PathVariable("id") Long id,
+                                          @Valid @NotNull @PathVariable("tagId") Long tagId) {
+        resourceTagService.deleteByResourceIdTagId(id, tagId);
+        return ApiResp.success();
+    }
+
 
     @PostMapping("/download")
     @ApiOperation("Download ")

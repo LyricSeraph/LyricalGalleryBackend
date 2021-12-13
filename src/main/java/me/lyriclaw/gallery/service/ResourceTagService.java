@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,11 @@ public class ResourceTagService {
         ResourceTag bean = requireOne(id);
         BeanUtils.copyProperties(vO, bean);
         resourceTagRepository.save(bean);
+    }
+
+    @Transactional
+    public void deleteByResourceIdTagId(@NonNull Long resourceId, @NonNull Long tagId) {
+        resourceTagRepository.deleteByResourceIdAndTagId(resourceId, tagId);
     }
 
     public ResourceTagDTO getById(Long id) {

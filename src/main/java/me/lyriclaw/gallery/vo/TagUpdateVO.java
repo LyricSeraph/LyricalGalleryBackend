@@ -9,8 +9,9 @@ import java.io.Serializable;
 
 @Data
 @ApiModel("Update ")
-@EqualsAndHashCode(callSuper = false)
-public class TagUpdateVO extends TagVO implements Serializable {
+public class TagUpdateVO implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    private String name;
 
 }
