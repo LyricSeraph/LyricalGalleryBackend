@@ -41,7 +41,7 @@ public class PrivateResourceController {
     private final StorageService storageService;
 
     @Autowired
-    public PrivateResourceController(ResourceService resourceService, StorageService storageService, StorageConfigProps storageConfigProps) {
+    public PrivateResourceController(ResourceService resourceService, StorageService storageService) {
         this.resourceService = resourceService;
         this.storageService = storageService;
     }
@@ -53,6 +53,13 @@ public class PrivateResourceController {
         resourceService.delete(id);
         storageService.delete(resourceDTO.getStorageFilename());
         return ApiResp.success();
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation("Update ")
+    public ApiResp<ResourceDTO> update(@Valid @NotNull @PathVariable("id") Long id, @RequestBody ResourceUpdateVO vO) {
+        resourceService.update(id, vO);
+        return ApiResp.success(resourceService.getById(id));
     }
 
     @PostMapping("/download")

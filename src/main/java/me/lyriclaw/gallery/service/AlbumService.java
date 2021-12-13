@@ -77,15 +77,10 @@ public class AlbumService {
     private AlbumDTO fillResourceData(AlbumDTO albumDTO) {
         ResourceQueryVO queryVO = new ResourceQueryVO();
         queryVO.setAlbumId(albumDTO.getAlbumId());
-        queryVO.setStatus(2);
         Page<ResourceDTO> sampleImages = resourceService.query(queryVO,
                 PageRequest.ofSize(4).withSort(Sort.Direction.DESC, "resourceId"));
         albumDTO.setSampleResources(sampleImages.toList());
-
-        queryVO.setStatus(null);
-        Page<ResourceDTO> totalImages = resourceService.query(queryVO,
-                PageRequest.ofSize(1).withSort(Sort.Direction.DESC, "resourceId"));
-        albumDTO.setAlbumSize(totalImages.getTotalElements());
+        albumDTO.setAlbumSize(sampleImages.getTotalElements());
         return albumDTO;
     }
 
