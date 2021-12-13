@@ -54,16 +54,18 @@ public class ResourceDownloadScheduler {
                     Future<StorageService.StorageResult> future = entry.getValue();
                     try {
                         StorageService.StorageResult r = future.get();
-                        if (r.isSuccess() && r.getThumbnails() != null) {
+                        if (r.isSuccess()) {
                             ThumbnailGenerator.GenerateThumbnailResult generateThumbnailResult = r.getThumbnails();
                             float ratio = generateThumbnailResult.getRatio();
                             String sThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.small);
                             String mThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.medium);
                             String lThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.large);
                             resourceService.updateThumbnails(id, ratio, sThumb, mThumb, lThumb);
-                            success = true;
                         }
-                    } catch (InterruptedException | ExecutionException ignored) {}
+                        success = true;
+                    } catch (InterruptedException | ExecutionException e) {
+                        log.debug("ResourceDownloadScheduler downloadSchedule throw exception", e);
+                    }
                     resourceService.updateStatusById(id, success ? DownloadStatus.FINISHED : DownloadStatus.FAILED);
                 }
             }

@@ -118,7 +118,7 @@ public class ResourceService {
         return bean;
     }
 
-    private Resource requireOne(Long id) {
+    public Resource requireOne(Long id) {
         return resourceRepository.findById(id)
                 .orElseThrow(() -> new ResponseException(ApiResponseStatus.STATUS_NOT_FOUND, "Resource not found: " + id));
     }

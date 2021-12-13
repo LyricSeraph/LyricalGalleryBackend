@@ -15,7 +15,7 @@ public interface StorageService {
     @AllArgsConstructor
     class StorageResult {
         boolean success;
-        ThumbnailGenerator.GenerateThumbnailResult thumbnails; // null when success == false
+        ThumbnailGenerator.GenerateThumbnailResult thumbnails;
     }
 
     StorageResult store(MultipartFile file, String filename);

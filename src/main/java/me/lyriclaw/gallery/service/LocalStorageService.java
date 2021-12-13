@@ -40,7 +40,7 @@ public class LocalStorageService implements StorageService {
             return new StorageResult(false, null);
         }
         ThumbnailGenerator.GenerateThumbnailResult result = thumbnailService.generateThumbnails(targetFile);
-        return new StorageResult(result != null, result);
+        return new StorageResult(true, result);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class LocalStorageService implements StorageService {
             localFile.delete();
         }
         ThumbnailGenerator.GenerateThumbnailResult result = thumbnailService.generateThumbnails(targetFile);
-        return new StorageResult(result != null, result);
+        return new StorageResult(true, result);
     }
 
     @Override

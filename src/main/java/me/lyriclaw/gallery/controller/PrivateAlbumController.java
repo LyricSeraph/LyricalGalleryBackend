@@ -37,12 +37,4 @@ public class PrivateAlbumController {
         return ApiResp.success();
     }
 
-    @PutMapping("/{id}")
-    @ApiOperation("Update ")
-    public ApiResp<Object> update(@Valid @NotNull @PathVariable("id") Long id,
-                       @Valid @RequestBody AlbumUpdateVO vO) {
-        albumService.update(id, vO);
-        return ApiResp.success();
-    }
-
 }

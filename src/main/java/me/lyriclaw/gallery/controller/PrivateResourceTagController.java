@@ -37,11 +37,4 @@ public class PrivateResourceTagController {
         return ApiResp.success();
     }
 
-    @PutMapping("/{id}")
-    @ApiOperation("Update ")
-    public ApiResp<Object> update(@Valid @NotNull @PathVariable("id") Long id,
-                       @Valid @RequestBody ResourceTagUpdateVO vO) {
-        resourceTagService.update(id, vO);
-        return ApiResp.success();
-    }
 }

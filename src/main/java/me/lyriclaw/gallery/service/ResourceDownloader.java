@@ -46,6 +46,7 @@ public class ResourceDownloader {
             log.debug("ResourceDownloader downloadResource: " + "tempFile = [" + tempFile + "]");
             HttpUrlDownloader downloader = new HttpUrlDownloader(resourceDTO.getSourceUrl(), tempFile);
             if (downloader.download(client)) {
+                log.debug("ResourceDownloader downloadResource: download success: " + resourceDTO.getSourceUrl());
                 return AsyncResult.forValue(storageService.store(downloader.getSavedFile(), resourceDTO.getStorageFilename()));
             }
         } catch (Exception e) {

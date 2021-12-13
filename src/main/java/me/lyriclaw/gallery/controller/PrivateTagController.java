@@ -37,12 +37,4 @@ public class PrivateTagController {
         return ApiResp.success();
     }
 
-    @PutMapping("/{id}")
-    @ApiOperation("Update ")
-    public ApiResp<Object> update(@Valid @NotNull @PathVariable("id") Long id,
-                       @Valid @RequestBody TagUpdateVO vO) {
-        tagService.update(id, vO);
-        return ApiResp.success();
-    }
-
 }

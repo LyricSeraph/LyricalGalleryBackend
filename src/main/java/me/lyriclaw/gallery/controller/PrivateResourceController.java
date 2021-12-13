@@ -7,6 +7,7 @@ import me.lyriclaw.gallery.config.bean.StorageConfigProps;
 import me.lyriclaw.gallery.constants.DownloadStatus;
 import me.lyriclaw.gallery.constants.PreviewSize;
 import me.lyriclaw.gallery.dto.ResourceDTO;
+import me.lyriclaw.gallery.entity.Resource;
 import me.lyriclaw.gallery.functional.thumbnail.ThumbnailGenerator;
 import me.lyriclaw.gallery.service.ResourceService;
 import me.lyriclaw.gallery.service.StorageService;
@@ -53,17 +54,9 @@ public class PrivateResourceController {
         return ApiResp.success();
     }
 
-    @PutMapping("/{id}")
-    @ApiOperation("Update ")
-    public ApiResp<Object> update(@Valid @NotNull @PathVariable("id") Long id,
-                       @Valid @RequestBody ResourceUpdateVO vO) {
-        resourceService.update(id, vO);
-        return ApiResp.success();
-    }
-
     @PostMapping("/download")
     @ApiOperation("Download ")
-    public ApiResp<Long> download(@Valid @RequestBody ResourceDownloadVO vO) {
+    public ApiResp<ResourceDTO> download(@Valid @RequestBody ResourceDownloadVO vO) {
         if (StringUtils.hasLength(vO.getUrl())) {
             URI uri = URI.create(vO.getUrl());
             String originFilename = Paths.get(uri.getPath()).getFileName().toString();
@@ -81,7 +74,7 @@ public class PrivateResourceController {
             resourceVO.setStatus(DownloadStatus.IDLE.getStatusCode());
             resourceVO.setRatio(1F);
             Long id = resourceService.save(resourceVO);
-            return ApiResp.success(id);
+            return ApiResp.success(resourceService.getById(id));
         }
         return ApiResp.error(ApiResponseStatus.STATUS_PARAMETER_INVALID);
     }
