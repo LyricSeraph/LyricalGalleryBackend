@@ -39,7 +39,7 @@ create index if not exists Resource_collection_created_at_index
 create table if not exists Tag
 (
     tag_id bigint unsigned auto_increment primary key,
-    name varchar(64) default '' not null,
+    name varchar(64) unique not null,
     created_at timestamp default current_timestamp() not null,
     updated_at timestamp default current_timestamp() not null on update current_timestamp(),
     constraint Tag_name_uindex unique (name),

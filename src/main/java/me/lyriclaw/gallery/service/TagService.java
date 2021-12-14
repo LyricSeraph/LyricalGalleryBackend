@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,6 +49,16 @@ public class TagService {
     public TagDTO getById(Long id) {
         Tag original = requireOne(id);
         return toDTO(original);
+    }
+
+    public TagDTO getByNameOrCreate(String name) {
+        Optional<TagDTO> tag = tagRepository.getTagByName(name).map(this::toDTO);
+        return tag.orElseGet(() -> {
+            TagVO tagVO = new TagVO();
+            tagVO.setName(name);
+            Long id = save(tagVO);
+            return getById(id);
+        });
     }
 
     public List<TagDTO> query(TagQueryVO vO) {

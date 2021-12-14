@@ -53,12 +53,7 @@ public class ResourceDownloadScheduler {
                     try {
                         StorageService.StorageResult r = future.get();
                         if (r != null && r.getThumbnails() != null) {
-                            ThumbnailGenerator.GenerateThumbnailResult generateThumbnailResult = r.getThumbnails();
-                            float ratio = generateThumbnailResult.getRatio();
-                            String sThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.small);
-                            String mThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.medium);
-                            String lThumb = generateThumbnailResult.getThumbnails().get(PreviewSize.large);
-                            resourceService.updateThumbnails(id, ratio, sThumb, mThumb, lThumb);
+                            resourceService.updateResourceThumbnails(id, r.getThumbnails());
                         }
                         if (r != null && r.isSuccess()) {
                             success = true;

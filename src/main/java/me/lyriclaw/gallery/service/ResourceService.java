@@ -3,8 +3,10 @@ package me.lyriclaw.gallery.service;
 import lombok.extern.slf4j.Slf4j;
 import me.lyriclaw.gallery.constants.ApiResponseStatus;
 import me.lyriclaw.gallery.constants.DownloadStatus;
+import me.lyriclaw.gallery.constants.PreviewSize;
 import me.lyriclaw.gallery.dto.ResourceDTO;
 import me.lyriclaw.gallery.entity.Resource;
+import me.lyriclaw.gallery.functional.thumbnail.ThumbnailGenerator;
 import me.lyriclaw.gallery.repo.ResourceRepository;
 import me.lyriclaw.gallery.throwable.ResponseException;
 import me.lyriclaw.gallery.vo.ResourceQueryVO;
@@ -69,11 +71,6 @@ public class ResourceService {
     }
 
     @Transactional
-    public void markFailedTasks() {
-        resourceRepository.markFailedTasks();
-    }
-
-    @Transactional
     public void restoreFailedTasks() {
         resourceRepository.restoreFailedTasks();
     }
@@ -83,7 +80,16 @@ public class ResourceService {
         resourceRepository.restoreFailedTaskById(id);
     }
 
+
     @Transactional
+    public void updateResourceThumbnails(Long id, ThumbnailGenerator.GenerateThumbnailResult thumbnailResult) {
+        float ratio = thumbnailResult.getRatio();
+        String sThumb = thumbnailResult.getThumbnails().get(PreviewSize.small);
+        String mThumb = thumbnailResult.getThumbnails().get(PreviewSize.medium);
+        String lThumb = thumbnailResult.getThumbnails().get(PreviewSize.large);
+        updateThumbnails(id, ratio, sThumb, mThumb, lThumb);
+    }
+
     public void updateThumbnails(@NonNull Long id, float thumbRatio, String sThumb, String mThumb, String lThumb) {
         resourceRepository.updateThumbnails(id, thumbRatio, sThumb, mThumb, lThumb);
     }
@@ -113,7 +119,9 @@ public class ResourceService {
         ResourceDTO bean = new ResourceDTO();
         if (original != null) {
             BeanUtils.copyProperties(original, bean);
-            bean.setTags(original.getTags().stream().map(resourceTagService::toDTO).collect(Collectors.toList()));
+            if (original.getTags() != null) {
+                bean.setTags(original.getTags().stream().map(resourceTagService::toDTO).collect(Collectors.toList()));
+            }
         }
         return bean;
     }
