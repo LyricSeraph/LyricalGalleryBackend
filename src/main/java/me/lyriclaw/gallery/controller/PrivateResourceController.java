@@ -37,7 +37,7 @@ import java.util.UUID;
 @Api(tags = "Private Resource APIs")
 @Validated
 @RestController
-@RequestMapping("/private/api/resource")
+@RequestMapping("/api/private/resource")
 @Slf4j
 public class PrivateResourceController {
 

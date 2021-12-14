@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Api(tags = "Private Tag APIs")
 @Validated
 @RestController
-@RequestMapping("/private/api/tag")
+@RequestMapping("/api/private/tag")
 public class PrivateTagController {
 
     private final TagService tagService;

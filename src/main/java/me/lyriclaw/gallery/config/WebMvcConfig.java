@@ -73,7 +73,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 )
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("me.lyriclaw.gallery.controller"))
-                .paths(regex("(/public|/private)/api.*"))
+                .paths(regex("/api(/public|/private).*"))
                 .build();
     }
 

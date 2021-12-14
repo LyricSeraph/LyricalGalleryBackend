@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "Authentication Verification APIs")
 @Validated
 @RestController
-@RequestMapping("/private/api/verification")
+@RequestMapping("/api/private/verification")
 public class AuthVerificationController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)

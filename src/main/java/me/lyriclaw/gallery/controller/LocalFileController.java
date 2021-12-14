@@ -36,9 +36,19 @@ public class LocalFileController {
         return resourceLoader.getResource("file://" + filePath);
     }
 
-    @GetMapping("/{resource_type}/{filename:.+}")
+    @GetMapping("/resources/{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable("resource_type") LocalFileResourceType type, @PathVariable("filename") String filename) {
+    public ResponseEntity<Resource> serveResource(@PathVariable("filename") String filename) {
+        return serveFile(LocalFileResourceType.resources, filename);
+    }
+
+    @GetMapping("/thumbnails/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveThumbnail(@PathVariable("filename") String filename) {
+        return serveFile(LocalFileResourceType.thumbnails, filename);
+    }
+
+    ResponseEntity<Resource> serveFile(LocalFileResourceType type, String filename) {
         if (filename.contains("..")) {
             return ResponseEntity.badRequest().build();
         }

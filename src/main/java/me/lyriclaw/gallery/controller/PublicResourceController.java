@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @Api(tags = "Public Resource APIs")
 @Validated
 @RestController
-@RequestMapping("/public/api/resource")
+@RequestMapping("/api/public/resource")
 @Slf4j
 public class PublicResourceController {
 

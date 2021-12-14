@@ -21,7 +21,7 @@ import java.util.List;
 @Api(tags = "Public Tag APIs")
 @Validated
 @RestController
-@RequestMapping("/public/api/tag")
+@RequestMapping("/api/public/tag")
 @Slf4j
 public class PublicTagController {
 

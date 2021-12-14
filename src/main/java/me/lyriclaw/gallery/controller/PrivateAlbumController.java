@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Api(tags = "Private Album APIs")
 @Validated
 @RestController
-@RequestMapping("/private/api/album")
+@RequestMapping("/api/private/album")
 public class PrivateAlbumController {
 
     private final AlbumService albumService;

@@ -22,7 +22,7 @@ import java.util.List;
 @Api(tags = "Public Album APIs")
 @Validated
 @RestController
-@RequestMapping("/public/api/album")
+@RequestMapping("/api/public/album")
 @Slf4j
 public class PublicAlbumController {
 
