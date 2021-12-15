@@ -43,7 +43,7 @@ public class HttpClientConfig {
     }
 
     @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
     public OkHttpClient createHttpClient(@Autowired Proxy proxy) {
         return new OkHttpClient.Builder()
                 .proxy(proxy)
