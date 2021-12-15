@@ -3,6 +3,7 @@ package me.lyriclaw.gallery.vo;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
@@ -15,7 +16,7 @@ public class AlbumVO implements Serializable {
 
     private Long albumId;
 
-    @NotNull(message = "name can not null")
+    @NotEmpty(message = "name can not be empty")
     private String name;
 
     private Long coverId;

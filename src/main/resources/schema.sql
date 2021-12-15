@@ -21,7 +21,7 @@ create table if not exists Resource
     m_thumb varchar(64) null,
     l_thumb varchar(64) null,
     failed_tries int default 0 not null,
-    status int default 0 not null comment 'idle: 0, downloading: 1, finished: 2',
+    status int default 0 not null comment 'idle: 0, downloading: 1, finished: 2, failed: 3',
     created_at timestamp default current_timestamp() not null,
     updated_at timestamp default current_timestamp() not null on update current_timestamp(),
     constraint id unique (resource_id),

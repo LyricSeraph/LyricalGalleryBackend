@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
@@ -20,6 +21,7 @@ public class ResourceVO implements Serializable {
 
     private String extension;
 
+    @NotEmpty(message = "name can not be empty")
     private String name;
 
     private String sourceUrl;
@@ -40,7 +42,7 @@ public class ResourceVO implements Serializable {
      * idle: 0, downloading: 1, finished: 2
      */
     @NotNull(message = "status can not null")
-    @ApiModelProperty("idle: 0, downloading: 1, finished: 2")
+    @ApiModelProperty("idle: 0, downloading: 1, finished: 2, failed: 3")
     private Integer status;
 
     private Instant createdAt;
