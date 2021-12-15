@@ -105,7 +105,9 @@ public class PrivateResourceController {
         String extension = FilenameUtils.getExtension(filename);
         if (StringUtils.hasLength(vO.getName())) {
             filename = vO.getName();
-            extension = FilenameUtils.getExtension(filename);
+            if (!StringUtils.hasLength(extension)) {
+                extension = FilenameUtils.getExtension(filename);
+            }
         }
         ResourceVO resourceVO = new ResourceVO();
         resourceVO.setUuid(UUID.randomUUID().toString());
