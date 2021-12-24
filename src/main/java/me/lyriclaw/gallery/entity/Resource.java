@@ -36,7 +36,7 @@ public class Resource implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long resourceId;
 
-    @Column(name = "uuid")
+    @Column(name = "uuid", insertable = false, updatable = false)
     private String uuid;
 
     @Column(name = "extension", nullable = false)
@@ -47,13 +47,17 @@ public class Resource implements Serializable {
 
     @Column(name = "source_url")
     private String sourceUrl;
+
     @Column(name = "ratio", nullable = false)
     private Float ratio;
-    @Column(name = "s_thumb")
+
+    @Column(name = "s_thumb", insertable = false)
     private String sThumb;
-    @Column(name = "m_thumb")
+
+    @Column(name = "m_thumb", insertable = false)
     private String mThumb;
-    @Column(name = "l_thumb")
+
+    @Column(name = "l_thumb", insertable = false)
     private String lThumb;
 
     @Column(name = "album_id")
@@ -69,10 +73,10 @@ public class Resource implements Serializable {
     @ApiModelProperty("idle: 0, downloading: 1, finished: 2")
     private Integer status;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
     private Instant createdAt;
 
-    @Column(name = "updated_at", nullable = false, updatable = false)
+    @Column(name = "updated_at", nullable = false, insertable = false, updatable = false)
     private Instant updatedAt;
 
     @OneToMany(targetEntity = ResourceTag.class, mappedBy = "resourceId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -93,5 +97,9 @@ public class Resource implements Serializable {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    protected boolean canEqual(Object other) {
+        return other instanceof Resource;
     }
 }

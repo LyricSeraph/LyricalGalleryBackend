@@ -2,6 +2,7 @@ package me.lyriclaw.gallery.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import me.lyriclaw.gallery.dto.AlbumDTO;
 import me.lyriclaw.gallery.vo.ApiResp;
 import me.lyriclaw.gallery.service.AlbumService;
 import me.lyriclaw.gallery.vo.AlbumUpdateVO;
@@ -25,13 +26,14 @@ public class PrivateAlbumController {
     }
 
     @PostMapping
-    @ApiOperation("Save ")
-    public ApiResp<Long> save(@Valid @RequestBody AlbumVO vO) {
-        return ApiResp.success(albumService.save(vO));
+    @ApiOperation("Create new album")
+    public ApiResp<AlbumDTO> save(@Valid @RequestBody AlbumVO vO) {
+        Long id = albumService.save(vO);
+        return ApiResp.success(albumService.getById(id));
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation("Delete ")
+    @ApiOperation("Delete album by id")
     public ApiResp<Object> delete(@Valid @NotNull @PathVariable("id") Long id) {
         albumService.delete(id);
         return ApiResp.success();

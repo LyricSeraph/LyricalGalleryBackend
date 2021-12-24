@@ -31,16 +31,20 @@ public class PublicResourceController {
     }
 
     @RequestMapping(value = "/{id}", method = {RequestMethod.GET})
-    @ApiOperation("Retrieve by ID ")
+    @ApiOperation("Retrieve resource by id")
     public ApiResp<ResourceDTO> getById(@Valid @NotNull @PathVariable("id") Long id) {
         return ApiResp.success(resourceService.getById(id));
     }
 
     @RequestMapping(value = "", method = {RequestMethod.GET})
-    @ApiOperation("Retrieve by query ")
+    @ApiOperation("Retrieve resource by query")
     public ApiResp<Page<ResourceDTO>> query(@Valid ResourceQueryVO vO,
                                             @RequestParam(value = "tagId", required = false) Long tagId,
                                             @PageableDefault(page = 0, size = 20, sort = "resource_id", direction = Sort.Direction.DESC) Pageable pageable) {
-        return ApiResp.success(resourceService.queryBy(vO.getAlbumId(), tagId, vO.getName(), vO.getStatus(), pageable));
+        if (vO.isIgnoreAlbum()) {
+            return ApiResp.success(resourceService.findAll(tagId, vO.getName(), vO.getStatus(), pageable));
+        } else {
+            return ApiResp.success(resourceService.findInAlbum(vO.getAlbumId(), tagId, vO.getName(), vO.getStatus(), pageable));
+        }
     }
 }

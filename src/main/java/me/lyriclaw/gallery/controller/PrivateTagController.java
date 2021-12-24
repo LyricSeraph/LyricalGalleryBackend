@@ -26,21 +26,21 @@ public class PrivateTagController {
     }
 
     @PostMapping
-    @ApiOperation("Save ")
+    @ApiOperation("Create new tag")
     public ApiResp<TagDTO> save(@Valid @RequestBody TagVO vO) {
         Long id = tagService.save(vO);
         return ApiResp.success(tagService.getById(id));
     }
 
     @PutMapping("/{id}")
-    @ApiOperation("Update ")
+    @ApiOperation("Update tag by id")
     public ApiResp<TagDTO> update(@Valid @NotNull @PathVariable("id") Long id, @Valid @RequestBody TagUpdateVO vO) {
         tagService.update(id, vO);
         return ApiResp.success(tagService.getById(id));
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation("Delete ")
+    @ApiOperation("Delete tag by id")
     public ApiResp<Object> delete(@Valid @NotNull @PathVariable("id") Long id) {
         tagService.delete(id);
         return ApiResp.success();

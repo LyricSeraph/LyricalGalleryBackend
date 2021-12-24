@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+@Data
 @Getter
 @Setter
 @ToString
@@ -34,6 +35,9 @@ public class Album extends AbstractAuditable_ implements Serializable {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "parent_id")
+    private Long parentId;
 
     @Column(name = "cover_id")
     private Long coverId;
@@ -55,5 +59,9 @@ public class Album extends AbstractAuditable_ implements Serializable {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    protected boolean canEqual(Object other) {
+        return other instanceof Album;
     }
 }

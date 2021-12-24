@@ -60,35 +60,66 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>, JpaSp
     @Query(nativeQuery = true,
             value = "select * " +
                     "from Resource r inner join ResourceTag rt on r.resource_id = rt.resource_id " +
-                    "where (:albumId is null or album_id = :albumId) " +
+                    "where ((:albumId is null and album_id is null) or album_id = :albumId) " +
                     "and (:tagId is null or tag_id = :tagId) " +
                     "and (:status is null or status = :status) " +
                     "and (:name is null or name like %:name%) ",
             countQuery = "select count(*) " +
                     "from Resource inner join ResourceTag on Resource.resource_id = ResourceTag.resource_id " +
-                    "where (:albumId is null or album_id = :albumId) " +
+                    "where ((:albumId is null and album_id is null) or album_id = :albumId) " +
                     "and (:tagId is null or tag_id = :tagId) " +
                     "and (:status is null or status = :status) " +
                     "and (:name is null or name like %:name%) "
     )
-    Page<Resource> findAllBy(@Param("albumId") Long albumId,
-                             @Param("tagId") @NonNull Long tagId,
+    Page<Resource> findAllInAlbumBy(@Param("albumId") Long albumId,
+                                    @Param("tagId") @NonNull Long tagId,
+                                    @Param("name") String name,
+                                    @Param("status") Integer status,
+                                    Pageable pageable);
+
+    @Query(nativeQuery = true,
+            value = "select * " +
+                    "from Resource r inner join ResourceTag rt on r.resource_id = rt.resource_id " +
+                    "where album_id is not null " +
+                    "and (:tagId is null or tag_id = :tagId) " +
+                    "and (:status is null or status = :status) " +
+                    "and (:name is null or name like %:name%) ",
+            countQuery = "select count(*) " +
+                    "from Resource inner join ResourceTag on Resource.resource_id = ResourceTag.resource_id " +
+                    "where album_id is not null " +
+                    "and (:tagId is null or tag_id = :tagId) " +
+                    "and (:status is null or status = :status) " +
+                    "and (:name is null or name like %:name%) "
+    )
+    Page<Resource> findAllBy(@Param("tagId") @NonNull Long tagId,
                              @Param("name") String name,
                              @Param("status") Integer status,
                              Pageable pageable);
 
     @Query(nativeQuery = true,
             value = "select * from Resource " +
-                    "where (:albumId is null or album_id = :albumId) " +
+                    "where ((:albumId is null and album_id is null) or album_id = :albumId) " +
                     "and (:status is null or status = :status) " +
                     "and (:name is null or name like %:name%)",
             countQuery = "select count(*) from Resource " +
-                    "where (:albumId is null or album_id = :albumId) " +
+                    "where ((:albumId is null and album_id is null) or album_id = :albumId) " +
                     "and (:status is null or status = :status) " +
                     "and (:name is null or name like %:name%)")
-    Page<Resource> findAllBy(@Param("albumId") Long albumId,
-                             @Param("name") String name,
+    Page<Resource> findAllInAlbumBy(@Param("albumId") Long albumId,
+                                    @Param("name") String name,
+                                    @Param("status") Integer status,
+                                    Pageable pageable);
+
+    @Query(nativeQuery = true,
+            value = "select * from Resource " +
+                    "where album_id is not null " +
+                    "and (:status is null or status = :status) " +
+                    "and (:name is null or name like %:name%)",
+            countQuery = "select count(*) from Resource " +
+                    "where album_id is not null " +
+                    "and (:status is null or status = :status) " +
+                    "and (:name is null or name like %:name%)")
+    Page<Resource> findAllBy(@Param("name") String name,
                              @Param("status") Integer status,
                              Pageable pageable);
-
 }

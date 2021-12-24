@@ -2,16 +2,20 @@ create table if not exists Album
 (
     album_id bigint unsigned auto_increment primary key ,
     name varchar(64) default '' not null,
+    parent_id bigint unsigned,
     cover_id bigint unsigned,
     created_at timestamp default current_timestamp() not null,
     updated_at timestamp default current_timestamp() not null on update current_timestamp(),
-    constraint id unique (album_id)
+    constraint id unique (album_id),
+    constraint `fk_album_parent` foreign key (parent_id) REFERENCES Album (album_id)
+                                                              on update restrict
+                                                              on delete set null
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 create table if not exists Resource
 (
     resource_id bigint unsigned auto_increment primary key,
-    uuid varchar(36) unique default uuid(),
+    uuid varchar(36) unique default uuid() not null,
     extension varchar(10) default '' not null,
     name varchar(256) default '' not null,
     source_url varchar(1024),
@@ -26,8 +30,8 @@ create table if not exists Resource
     updated_at timestamp default current_timestamp() not null on update current_timestamp(),
     constraint id unique (resource_id),
     constraint `fk_resource_album` foreign key (album_id) REFERENCES Album (album_id)
-        on update restrict
-        on delete set null
+                                                              on update restrict
+                                                              on delete set null
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 create index if not exists Resource_collection_name_index
@@ -65,3 +69,4 @@ create index if not exists ResourceTag_resource_index
 
 create unique index if not exists ResourceTag_tag_index
     on ResourceTag (tag_id, resource_id);
+

@@ -55,7 +55,7 @@ public class PrivateResourceController {
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation("Delete ")
+    @ApiOperation("Delete resource by id")
     public ApiResp<Object> delete(@Valid @NotNull @PathVariable("id") Long id) {
         ResourceDTO resourceDTO = resourceService.getById(id);
         resourceService.delete(id);
@@ -64,7 +64,7 @@ public class PrivateResourceController {
     }
 
     @PutMapping("/{id}")
-    @ApiOperation("Update ")
+    @ApiOperation("Update resource by id")
     public ApiResp<ResourceDTO> update(@Valid @NotNull @PathVariable("id") Long id, @RequestBody ResourceUpdateVO vO) {
         resourceService.update(id, vO);
         return ApiResp.success(resourceService.getById(id));
@@ -82,7 +82,7 @@ public class PrivateResourceController {
     }
 
     @DeleteMapping("/{id}/tag/{tagId}")
-    @ApiOperation("Delete tag to resource")
+    @ApiOperation("Delete tag from resource")
     public ApiResp<Object> deleteTag(@Valid @NotNull @PathVariable("id") Long id,
                                           @Valid @NotNull @PathVariable("tagId") Long tagId) {
         resourceTagService.deleteByResourceIdTagId(id, tagId);
@@ -90,7 +90,7 @@ public class PrivateResourceController {
     }
 
     @PostMapping("/download")
-    @ApiOperation("Download ")
+    @ApiOperation("Create download resource task")
     @Transactional
     public ApiResp<ResourceDTO> download(@Valid @RequestBody ResourceDownloadVO vO) {
         URL url;
@@ -110,7 +110,6 @@ public class PrivateResourceController {
             }
         }
         ResourceVO resourceVO = new ResourceVO();
-        resourceVO.setUuid(UUID.randomUUID().toString());
         resourceVO.setName(filename);
         resourceVO.setExtension(extension);
         resourceVO.setSourceUrl(vO.getUrl());
@@ -134,13 +133,12 @@ public class PrivateResourceController {
     }
 
     @PostMapping("/upload")
-    @ApiOperation("Upload ")
+    @ApiOperation("Upload new resource")
     public ApiResp<ResourceDTO> upload(@RequestParam("file") MultipartFile file, @RequestParam(value = "album", required = false) Long albumId) {
         // create record
         String originFilename = file.getOriginalFilename();
         String extension = FilenameUtils.getExtension(originFilename);
         ResourceVO resourceVO = new ResourceVO();
-        resourceVO.setUuid(UUID.randomUUID().toString());
         resourceVO.setExtension(extension);
         resourceVO.setName(originFilename);
         resourceVO.setSourceUrl(null);
@@ -165,7 +163,7 @@ public class PrivateResourceController {
     }
 
     @PostMapping("/restore")
-    @ApiOperation("Restore failed resource")
+    @ApiOperation("Restore failed resource by id, apply to all failed resources if id not provided")
     public ApiResp<Boolean> restoreFailed(@RequestParam(value = "id", required = false) Long id) {
         if (id != null) {
             resourceService.restoreFailedTaskById(id);

@@ -18,6 +18,8 @@ public class AlbumDTO implements Serializable {
 
     private String name;
 
+    private Long parentId;
+
     private Long coverId;
 
     private Instant createdAt;
@@ -29,4 +31,7 @@ public class AlbumDTO implements Serializable {
 
     private long albumSize;
 
+    private long subAlbumCount;
+
+    private AlbumDTO parent;
 }

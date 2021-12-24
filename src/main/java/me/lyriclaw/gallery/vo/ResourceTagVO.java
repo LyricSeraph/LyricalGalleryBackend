@@ -8,17 +8,14 @@ import java.io.Serializable;
 
 
 @Data
-@ApiModel("Save ")
+@ApiModel("Save resource-tag")
 public class ResourceTagVO implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    private Long rtId;
 
     @NotNull(message = "tagId can not null")
     private Long tagId;
 
     @NotNull(message = "resourceId can not null")
     private Long resourceId;
-
 
 }

@@ -7,7 +7,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@ApiModel("Retrieve by query ")
+@ApiModel("Retrieve resource-tag by query")
 public class ResourceTagQueryVO implements Serializable {
     private static final long serialVersionUID = 1L;
 

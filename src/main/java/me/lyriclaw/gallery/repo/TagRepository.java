@@ -1,6 +1,5 @@
 package me.lyriclaw.gallery.repo;
 
-import me.lyriclaw.gallery.dto.TagDTO;
 import me.lyriclaw.gallery.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -20,6 +19,6 @@ public interface TagRepository extends JpaRepository<Tag, Long>, JpaSpecificatio
                     "and tag_id in " +
                     "(select unique(tag_id) " +
                     "from ResourceTag inner join Resource on ResourceTag.resource_id = Resource.resource_id " +
-                    "where album_id = :albumId)")
+                    "where (:albumId is null and album_id is null) or (album_id = :albumId))")
     List<Tag> findTagsByAlbumAndName(@Param("albumId") Long albumId, @Param("name") String name);
 }

@@ -53,4 +53,8 @@ public class Tag implements Serializable {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+    protected boolean canEqual(Object other) {
+        return other instanceof Tag;
+    }
 }
